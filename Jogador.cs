@@ -1,28 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JogoDaVelha
+﻿namespace JogoDaVelha
 {
-    internal struct Jogador
+    internal class Jogador
     {
-        string nome;
-        int pontuacao;
-        int quantidadeVitorias;
-        int quantidadeDerrotas;
-        int quantidadeEmpates;
+        private string? _nome;
+        internal int QuantidadeVitorias = 0;
+        internal int QuantidadeDerrotas = 0;
+        internal int QuantidadeEmpates = 0;
+
+        public string? Nome
+        {
+            get { return _nome; }
+        }
+
+        public int Pontuacao
+        {
+            get { return QuantidadeVitorias * 3 + QuantidadeEmpates + QuantidadeDerrotas * -1; }
+        }
 
 
+        internal Jogador(string nome)
+            {
+                _nome = nome;
+            }
+
+       
 
         public override string ToString()
         {
-            return $"Jogador: {nome}\n" +
-                $"Quantidade de vitórias: {quantidadeVitorias}\n" +
-                $"Quantidade de derrotas: {quantidadeDerrotas}\n" +
-                $"Quantidade de empates: {quantidadeEmpates}\n" +
-                $"\nPontuação total: {pontuacao}\n";
+            return $"Jogador: {_nome}\n" +
+                $"Vitórias: {QuantidadeVitorias}\n" +
+                $"Derrotas: {QuantidadeDerrotas}\n" +
+                $"Empates : {QuantidadeEmpates}\n" +
+                $"Pontuacao: {Pontuacao}\n";
 
         }
 

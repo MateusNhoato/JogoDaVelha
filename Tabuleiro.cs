@@ -9,16 +9,17 @@ namespace JogoDaVelha
     internal struct Tabuleiro
     {
         internal static string[,] tabuleiro;
+        internal static List<string> jogadasPossiveis;
         private static int _tamanhoDoTabuleiro;
-        public static List<string> jogadasPossiveis;
 
-        public static int TamanhoDoTabuleiro
+        internal static int TamanhoDoTabuleiro
         {
             get { return _tamanhoDoTabuleiro; }
             set
             {
                 if (value >= 3 && value <= 100)
-                    _tamanhoDoTabuleiro = value * 2 - 1;
+                        _tamanhoDoTabuleiro = value * 2 - 1;
+                                      
                 else
                     Console.WriteLine("Tamanho inválido.");
             }

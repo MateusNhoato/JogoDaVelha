@@ -1,5 +1,6 @@
 ﻿
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
 
 namespace JogoDaVelha
 {
@@ -25,7 +26,7 @@ namespace JogoDaVelha
     
     
         // função para checkar se alguém ganhou ou deu velha
-        internal static string CheckarVitoriaOuVelha()
+        internal static string? CheckarVitoriaOuVelha()
         {
             int tamanhoAuxiliar = (Tabuleiro.TamanhoDoTabuleiro + 1) / 2;
             
@@ -34,6 +35,8 @@ namespace JogoDaVelha
             string[] valoresNaDiagonalSecundaria = new string[tamanhoAuxiliar];
 
             int diagonalSecundariaAuxiliar = tamanhoAuxiliar + 1;
+            if(tamanhoAuxiliar % 2 == 0)
+                diagonalSecundariaAuxiliar = tamanhoAuxiliar + 2;
 
             // lista das colunas
             List<string[]> colunas = new List<string[]>();
@@ -73,18 +76,18 @@ namespace JogoDaVelha
                 // checkando os valores únicos da linha
                 valoresNaLinha = valoresNaLinha.Distinct().ToArray();
                 if(valoresNaLinha.Length == 1)
-                   return "Vencedor: " + valoresNaLinha[0];
+                   return valoresNaLinha[0];
                 
             }
             // checkando a diagonal principal
             valoresNaDiagonalPrincipal = valoresNaDiagonalPrincipal.Distinct().ToArray();
             if (valoresNaDiagonalPrincipal.Length == 1)
-                return "Vencedor: " + valoresNaDiagonalPrincipal[0];
+                return  valoresNaDiagonalPrincipal[0];
 
             // checkando a diagonal secundária
             valoresNaDiagonalSecundaria = valoresNaDiagonalSecundaria.Distinct().ToArray();
             if (valoresNaDiagonalSecundaria.Length == 1)
-                return "Vencedor: " + valoresNaDiagonalSecundaria[0];
+                return valoresNaDiagonalSecundaria[0];
 
             // checkando as colunas
             for(int i=0; i <colunas.Count; i++)
@@ -92,17 +95,100 @@ namespace JogoDaVelha
                 string[] coluna = colunas[i];
                 coluna = coluna.Distinct().ToArray();
                 if (coluna.Length == 1)
-                    return "Vencedor: " + coluna[0];
+                    return coluna[0];
             }
 
             // checkando velha
-            if (Tabuleiro.jogadasPossiveis.Count == 0)
-                return "Deu velha";
+            if (Tabuleiro.jogadasPossiveis.Count == 0)                
+                return " ";
+            
 
             // caso ninguém ganhou e não deu velha
-            return " ";
+            return null;
             
         }
     
+        // função principal de jogar
+        internal static void Jogar(Jogador jogador1, Jogador jogador2)
+        {
+            int tamanho;
+            string? vencedor;
+            do
+            {
+                Console.Clear();
+                Console.Write("Digite o tamanho do jogo (3 a 10): ");
+                if (int.TryParse(Console.ReadLine(), out tamanho))
+                {
+                    if (tamanho >= 3 && tamanho <= 10)
+                    {
+                        Console.Clear();
+                        break;
+                    }
+                }                                
+            } while (true);
+            
+            // configurando o tabuleiro e gerando lista de jogadas possíveis
+            Tabuleiro.TamanhoDoTabuleiro = tamanho;
+            Tabuleiro.GerarTabuleiro();
+            Tabuleiro.ListarJogadasPossiveis();
+            Console.Clear();
+            Tabuleiro.MostrarTabuleiro();
+
+            Jogador jogador = jogador1;
+            string jogada = " X ";
+            while (true)
+            {
+                
+                string posicao;
+                do
+                {
+                    Console.WriteLine($"\nVez de {jogador.Nome}\n");
+                    Console.Write($"Digite a posição da jogada ({jogada.Trim()}): ");
+                    posicao = Console.ReadLine();
+                } while (!Tabuleiro.jogadasPossiveis.Contains(posicao));
+                Tabuleiro.jogadasPossiveis.Remove(posicao);
+                Jogo.Jogada(posicao, jogada);
+                Console.Clear();
+                Tabuleiro.MostrarTabuleiro();
+
+                vencedor = Jogo.CheckarVitoriaOuVelha();
+                if (vencedor != null)
+                {
+                    if(vencedor == " ")
+                    {
+                        Console.WriteLine("\nDeu velha. Empate.");
+                        jogador1.QuantidadeEmpates += 1;
+                        jogador2.QuantidadeEmpates += 1;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\nVencedor: {jogador.Nome} ({vencedor}).");
+                        jogador.QuantidadeVitorias += 1;
+                        if (jogador == jogador1)
+                            jogador2.QuantidadeDerrotas += 1;
+                        
+                        else
+                            jogador1.QuantidadeDerrotas += 1;     
+                    }
+                    //SalvarResultado();
+                    Menu.AperteEnterParaContinuar();
+                    break;
+                }
+                if(jogador == jogador1)
+                {
+                    jogador = jogador2;
+                    jogada = " O ";
+                }
+                else
+                {
+                    jogador = jogador1;
+                    jogada = " X ";
+                }
+            }
+        }
+
+
+
+
     }
 }
