@@ -19,14 +19,14 @@ namespace JogoDaVelha
                 Console.Clear();
                 Console.WriteLine(Arte.titulo + "\n");
 
-                Console.WriteLine("1 - Jogar");
-                Console.WriteLine("2 - Adicionar jogadores");
-                Console.WriteLine("3 - Listar jogadores");
-                Console.WriteLine("4 - Histórico de partidas");
-                Console.WriteLine("5 - Histórico do Jogador");
-                Console.WriteLine("6 - Hall da fama");
-                Console.WriteLine("0 - Encerrar o programa");
-                Console.Write("\nDigite a opção deseja: ");
+                Console.WriteLine("  1 - Jogar");
+                Console.WriteLine("  2 - Adicionar jogadores");
+                Console.WriteLine("  3 - Listar jogadores");
+                Console.WriteLine("  4 - Histórico de partidas");
+                Console.WriteLine("  5 - Histórico do Jogador");
+                Console.WriteLine("  6 - Hall da fama");
+                Console.WriteLine("  0 - Encerrar o programa");
+                Console.Write("\n  Digite a opção desejada: ");
                 opcao = Console.ReadLine();
 
                 switch(opcao) 
@@ -74,13 +74,13 @@ namespace JogoDaVelha
             Console.Clear();
             // passar os nomes para pascal case
             TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
-            
-            Console.Write("Player 1 (X): ");
+            Console.WriteLine(Arte.jogar);
+            Console.Write("  Player 1 (X): ");
             string? nomePrimeiroJogador = Console.ReadLine();
             nomePrimeiroJogador = textInfo.ToTitleCase(nomePrimeiroJogador);
             Jogador? primeiroJogador = DadosJogadores.Jogadores.Find(x => x.Nome == nomePrimeiroJogador);
 
-            Console.Write("Player 2 (O): ");
+            Console.Write("  Player 2 (O): ");
             string? nomeSegundoJogador = Console.ReadLine();
             nomeSegundoJogador = textInfo.ToTitleCase(nomeSegundoJogador);
             Jogador? segundoJogador = DadosJogadores.Jogadores.Find(x => x.Nome == nomeSegundoJogador);
@@ -91,7 +91,7 @@ namespace JogoDaVelha
             }
             else
             {
-                Console.WriteLine("\nJogador(es) inválido(s)");
+                Console.WriteLine("\n  Jogador(es) inválido(s)");
                 AperteEnterParaContinuar();
             }
         }
@@ -101,7 +101,7 @@ namespace JogoDaVelha
         {
             Console.Clear();
             Console.WriteLine(Arte.historico + "\n");
-            Console.Write("Digitar o nome do jogador: ");
+            Console.Write("  Digitar o nome do jogador: ");
             string nome = Console.ReadLine();
 
             // passar o nome para pascal case
@@ -114,7 +114,7 @@ namespace JogoDaVelha
             
             else
             {
-                Console.WriteLine("Jogador não encontrado.");
+                Console.WriteLine("  Jogador não encontrado.");
                 AperteEnterParaContinuar();
             }
         }
@@ -124,7 +124,7 @@ namespace JogoDaVelha
         internal static void EntradaInvalida()
         {
             Console.WriteLine(Arte.linha);
-            Console.WriteLine("Entrada inválida.");
+            Console.WriteLine("  Entrada inválida.");
             System.Threading.Thread.Sleep(1200);
             Console.Clear();
          }
@@ -132,7 +132,7 @@ namespace JogoDaVelha
         internal static void AperteEnterParaContinuar() 
         {
             Console.WriteLine(Arte.linha);
-            Console.WriteLine("Aperte enter para continuar");
+            Console.WriteLine("  Aperte enter para continuar");
             Console.ReadLine();
             Console.Clear();
         }

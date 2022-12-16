@@ -21,7 +21,7 @@ namespace JogoDaVelha
                         _tamanhoDoTabuleiro = value * 2 - 1;
                                       
                 else
-                    Console.WriteLine("Tamanho inválido.");
+                    Console.WriteLine("  Tamanho inválido.");
             }
         }
 
@@ -74,9 +74,10 @@ namespace JogoDaVelha
         // função para imprimir o tabuleiro
         internal static void MostrarTabuleiro()
         {
-
+            Console.WriteLine("\n");
             for (int i = 0; i < TamanhoDoTabuleiro; i++)
             {
+                Console.Write("   ");
                 for (int j = 0; j < TamanhoDoTabuleiro; j++)
                 {
                     Console.Write(tabuleiro[i, j]);
@@ -85,6 +86,7 @@ namespace JogoDaVelha
             }
         }
 
+        // função para fazer uma string do tabuleiro para adicioná-lo no registro da partida
         public static string  TabuleiroParaRegistro()
         {
             string resultado = "";

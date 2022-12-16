@@ -64,6 +64,7 @@ namespace JogoDaVelha
             }
         }
 
+        // função para salvar os resultados da partida (tabuleiro, jogadores, resultado)
         internal static void SalvarResultadoDaPartida(int tamanhoTabuleiro, string jogador1, string jogador2, string resultado)
         {
             string pathRegistros = @"..\..\..\Dados\RegistroDasPartidas.txt";
@@ -84,6 +85,7 @@ namespace JogoDaVelha
                 File.Create(pathNumeroPartida).Close();
 
             }
+            // caso o arquivo esteja criado, porém vazio
             catch(System.FormatException){}
 
             // aumentando para a próxima partida
@@ -92,7 +94,7 @@ namespace JogoDaVelha
                 sw.WriteLine(partidaDeNumero + 1);
             }           
             
-            // aumentando a variável para regristar a seguir
+            // aumentando a variável para registrar a seguir
             partidaDeNumero++;
             
             // registrando resutados
@@ -138,11 +140,13 @@ namespace JogoDaVelha
                         }
                         // imprimindo os resultados
                         Console.WriteLine(Arte.linha);
-                        Console.WriteLine($"Partida: {numeroDaPartida}- {jogador1}(X) vs {jogador2}(O)\n");
+                        Console.WriteLine($"\n  Partida: {numeroDaPartida}- {jogador1}(X) vs {jogador2}(O)\n");
 
+                        // imprimindo tabuleiro
                         int cont = 0;
                         for (int i = 0; i < tamanhoTabuleiro; i++)
                         {
+                            Console.Write("  ");
                             for (int j = 0; j < tamanhoTabuleiro; j++)
                             {
                                 Console.Write(tabuleiro[cont]);
@@ -150,12 +154,16 @@ namespace JogoDaVelha
                             }
                             Console.WriteLine();
                         }
+
                         if (resultado == "X")
                             resultado = jogador1;
-                        else
+                        else if( resultado == "O")
                             resultado = jogador2;
 
-                        Console.WriteLine($"\nVencedor: {resultado}");                      
+                        if (resultado == "Velha")                      
+                            Console.WriteLine("\n  " + resultado);                       
+                        else
+                            Console.WriteLine($"\n  Vencedor: {resultado}");                      
 
                         linha = sr.ReadLine();
                     }
@@ -163,7 +171,7 @@ namespace JogoDaVelha
                 }                
             }
 
-            // se o arquivo não existe, crio um e fecho
+            // se o arquivo não existe, crio um e fecho ele
             catch(FileNotFoundException) 
             {               
                 File.Create(path).Close();

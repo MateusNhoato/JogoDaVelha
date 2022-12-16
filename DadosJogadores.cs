@@ -14,7 +14,7 @@ namespace JogoDaVelha
         {
             Console.Clear();
             Console.WriteLine(Arte.adicionarJogador + "\n");
-            Console.Write("Digite o nome do jogador: ");
+            Console.Write("  Digite o nome do jogador: ");
             string? nome = Console.ReadLine();
 
             if (nome.Length > 1 && nome.Length <= 60)
@@ -26,7 +26,7 @@ namespace JogoDaVelha
                     {
                         if (!char.IsLetter(c))
                         {
-                            Console.WriteLine("Nome do usuário só pode conter letras.");
+                            Console.WriteLine("  Nome do usuário só pode conter letras.");
                             Menu.EntradaInvalida();
                             return;
                         }
@@ -47,12 +47,12 @@ namespace JogoDaVelha
                 Jogador novoJogador = new Jogador(nome);
                 Jogadores.Add(novoJogador);
                 Registro.SalvarDadosDosJogadores();
-                Console.WriteLine("\nJogador cadastrado com sucesso!");
+                Console.WriteLine("\n  Jogador cadastrado com sucesso!");
                 Menu.AperteEnterParaContinuar();
             }
             else
             {
-                Console.WriteLine("Nomes devem conter entre 2 e 60 letras.");
+                Console.WriteLine("  Nomes devem conter entre 2 a 60 letras.");
                 Menu.AperteEnterParaContinuar();
             }
            
@@ -67,9 +67,9 @@ namespace JogoDaVelha
                     Console.WriteLine(jogador);
                
             else
-                Console.WriteLine("Nenhum jogador cadastrado.");
+                Console.WriteLine("  Nenhum jogador cadastrado.");
 
-            Console.WriteLine("\nObs: Vitórias = 3pts | Empates = 1pt | Derrotas = -1pt.");
+            Console.WriteLine("\n  Obs: Vitórias = 3pts | Empates = 1pt | Derrotas = -1pt.");
             Menu.AperteEnterParaContinuar();
         }
 
@@ -78,6 +78,8 @@ namespace JogoDaVelha
         {
             Console.Clear();
             Console.WriteLine(Arte.hallDaFama + "\n");
+
+            // lista em ordem de pontuação
             List<Jogador> jogadoresPorPontos = Jogadores.OrderBy(x => x.Pontuacao).ToList();
 
             int index = jogadoresPorPontos.Count -1;
@@ -86,7 +88,7 @@ namespace JogoDaVelha
                 for (int i = index, j = 1; i > index - 3; i--, j++)
                 {
                     Jogador jogador = jogadoresPorPontos[i];
-                    Console.WriteLine($"Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
+                    Console.WriteLine($"  Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
                 }
             }
             else
@@ -94,7 +96,7 @@ namespace JogoDaVelha
                 for(int i=index,j=1; i >= 0; i--, j++)
                 {
                     Jogador jogador = jogadoresPorPontos[i];
-                    Console.WriteLine($"Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
+                    Console.WriteLine($"  Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
                 }
             }
             Menu.AperteEnterParaContinuar();
