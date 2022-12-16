@@ -137,8 +137,7 @@ namespace JogoDaVelha
             Jogador jogador = jogador1;
             string jogada = " X ";
             while (true)
-            {
-                
+            {               
                 string posicao;
                 do
                 {
@@ -154,23 +153,44 @@ namespace JogoDaVelha
                 vencedor = Jogo.CheckarVitoriaOuVelha();
                 if (vencedor != null)
                 {
+                    string perdedor;
+                    string resultado;
                     if(vencedor == " ")
                     {
                         Console.WriteLine("\nDeu velha. Empate.");
                         jogador1.QuantidadeEmpates += 1;
                         jogador2.QuantidadeEmpates += 1;
+                        resultado = "Velha";
+                        vencedor = jogador1.Nome;
+                        perdedor = jogador2.Nome;
                     }
                     else
                     {
                         Console.WriteLine($"\nVencedor: {jogador.Nome} ({vencedor}).");
                         jogador.QuantidadeVitorias += 1;
+                        resultado = vencedor;
+                        vencedor = jogador.Nome;
+                        // alterando quantidade de derrotas do perdedor
                         if (jogador == jogador1)
+                        {                          
                             jogador2.QuantidadeDerrotas += 1;
-                        
+
+                            // string para salvar resultado
+                            perdedor = jogador2.Nome;
+                        }                       
                         else
-                            jogador1.QuantidadeDerrotas += 1;     
+                        {
+                            jogador1.QuantidadeDerrotas += 1;
+
+                            perdedor= jogador1.Nome;
+                        }
+                                
                     }
-                    //SalvarResultado();
+                    // salvando os dados dos jogadores
+                    Registro.SalvarDadosDosJogadores();
+                    // salvando a partida
+                    Registro.SalvarResultadoDaPartida(Tabuleiro.TamanhoDoTabuleiro,vencedor, perdedor, resultado);
+
                     Menu.AperteEnterParaContinuar();
                     break;
                 }

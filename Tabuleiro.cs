@@ -84,5 +84,15 @@ namespace JogoDaVelha
                 Console.WriteLine();
             }
         }
+
+        public static string  TabuleiroParaRegistro()
+        {
+            string resultado = "";
+            foreach (string s  in tabuleiro)
+            {
+                resultado += $"{s},";
+            }
+            return resultado;
+        }
     }
 }

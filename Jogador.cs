@@ -23,6 +23,13 @@
                 _nome = nome;
             }
 
+        internal Jogador(string nome, int vitorias, int empates, int derrotas)
+        {
+            _nome= nome;
+            QuantidadeVitorias= vitorias;
+            QuantidadeEmpates = empates;
+            QuantidadeDerrotas= derrotas;
+        }
        
 
         public override string ToString()

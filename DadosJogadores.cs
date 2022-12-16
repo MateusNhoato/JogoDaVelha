@@ -13,6 +13,7 @@ namespace JogoDaVelha
         internal static void CadastrarJogador()
         {
             Console.Clear();
+            Console.WriteLine(Arte.adicionarJogador + "\n");
             Console.Write("Digite o nome do jogador: ");
             string? nome = Console.ReadLine();
 
@@ -25,6 +26,7 @@ namespace JogoDaVelha
                     {
                         if (!char.IsLetter(c))
                         {
+                            Console.WriteLine("Nome do usuário só pode conter letras.");
                             Menu.EntradaInvalida();
                             return;
                         }
@@ -44,6 +46,7 @@ namespace JogoDaVelha
                 }
                 Jogador novoJogador = new Jogador(nome);
                 Jogadores.Add(novoJogador);
+                Registro.SalvarDadosDosJogadores();
                 Console.WriteLine("\nJogador cadastrado com sucesso!");
                 Menu.AperteEnterParaContinuar();
             }
@@ -58,7 +61,7 @@ namespace JogoDaVelha
         internal static void ListarTodosJogadores() 
         {
             Console.Clear();
-            Console.WriteLine("Jogadores:\n");
+            Console.WriteLine(Arte.jogadores + "\n");
             if (Jogadores.Count > 0 )
                 foreach (Jogador jogador in Jogadores)
                     Console.WriteLine(jogador);
@@ -66,7 +69,7 @@ namespace JogoDaVelha
             else
                 Console.WriteLine("Nenhum jogador cadastrado.");
 
-            Console.WriteLine("\nObs: Vitórias = 3pts, Empates = 1pt, Derrotas = -1pt.");
+            Console.WriteLine("\nObs: Vitórias = 3pts | Empates = 1pt | Derrotas = -1pt.");
             Menu.AperteEnterParaContinuar();
         }
     }
