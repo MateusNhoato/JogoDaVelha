@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -80,7 +82,9 @@ namespace JogoDaVelha
             catch(FileNotFoundException)
             {
                 File.Create(pathNumeroPartida).Close();
+
             }
+            catch(System.FormatException){}
 
             // aumentando para a próxima partida
             using (StreamWriter sw  = new StreamWriter(pathNumeroPartida, false))

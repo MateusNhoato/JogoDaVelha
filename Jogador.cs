@@ -34,14 +34,7 @@
 
         public override string ToString()
         {
-            return $"Jogador: {_nome}\n" +
-                $"Vitórias: {QuantidadeVitorias}\n" +
-                $"Derrotas: {QuantidadeDerrotas}\n" +
-                $"Empates : {QuantidadeEmpates}\n" +
-                $"Pontuacao: {Pontuacao}\n";
-
+            return $"Jogador: {_nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";               
         }
-
     }
-
 }

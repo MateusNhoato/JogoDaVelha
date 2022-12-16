@@ -57,7 +57,7 @@ namespace JogoDaVelha
             }
            
         }
-        // Função para listar os jogadores
+        // função para listar os jogadores
         internal static void ListarTodosJogadores() 
         {
             Console.Clear();
@@ -70,6 +70,33 @@ namespace JogoDaVelha
                 Console.WriteLine("Nenhum jogador cadastrado.");
 
             Console.WriteLine("\nObs: Vitórias = 3pts | Empates = 1pt | Derrotas = -1pt.");
+            Menu.AperteEnterParaContinuar();
+        }
+
+        // função hall da fama
+        internal static void HallDaFama()
+        {
+            Console.Clear();
+            Console.WriteLine(Arte.hallDaFama + "\n");
+            List<Jogador> jogadoresPorPontos = Jogadores.OrderBy(x => x.Pontuacao).ToList();
+
+            int index = jogadoresPorPontos.Count -1;
+            if(index > 2)
+            {
+                for (int i = index, j = 1; i > index - 3; i--, j++)
+                {
+                    Jogador jogador = jogadoresPorPontos[i];
+                    Console.WriteLine($"Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
+                }
+            }
+            else
+            {
+                for(int i=index,j=1; i >= 0; i--, j++)
+                {
+                    Jogador jogador = jogadoresPorPontos[i];
+                    Console.WriteLine($"Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
+                }
+            }
             Menu.AperteEnterParaContinuar();
         }
     }

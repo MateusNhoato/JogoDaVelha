@@ -55,6 +55,7 @@ namespace JogoDaVelha
                         break;
 
                     case "6":
+                        DadosJogadores.HallDaFama();
                         break;
 
                     default:
