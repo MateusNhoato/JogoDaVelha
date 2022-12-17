@@ -5,8 +5,12 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using JogoDaVelha.Entities;
+using JogoDaVelha.Repositories;
+using JogoDaVelha.Services;
+using JogoDaVelha.Views;
 
-namespace JogoDaVelha
+namespace JogoDaVelha.Controllers
 {
     internal class Menu
     {
@@ -29,7 +33,7 @@ namespace JogoDaVelha
                 Console.Write("\n  Digite a opção desejada: ");
                 opcao = Console.ReadLine();
 
-                switch(opcao) 
+                switch (opcao)
                 {
                     case "0":
                         break;
@@ -37,7 +41,7 @@ namespace JogoDaVelha
                     case "1":
                         PassarJogadoresParaJogo();
                         break;
-                        
+
                     case "2":
                         DadosJogadores.CadastrarJogador();
                         break;
@@ -61,11 +65,11 @@ namespace JogoDaVelha
                     default:
                         EntradaInvalida();
                         break;
-                
+
                 }
 
-            } while (opcao != "0");   
-            
+            } while (opcao != "0");
+
         }
 
         // validar e passar jogadores válidos para função jogar na classe jogo
@@ -85,7 +89,7 @@ namespace JogoDaVelha
             nomeSegundoJogador = textInfo.ToTitleCase(nomeSegundoJogador);
             Jogador? segundoJogador = DadosJogadores.Jogadores.Find(x => x.Nome == nomeSegundoJogador);
 
-            if(primeiroJogador != null && segundoJogador != null && primeiroJogador != segundoJogador) 
+            if (primeiroJogador != null && segundoJogador != null && primeiroJogador != segundoJogador)
             {
                 Jogo.Jogar(primeiroJogador, segundoJogador);
             }
@@ -108,10 +112,10 @@ namespace JogoDaVelha
             TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
             nome = textInfo.ToTitleCase(nome);
 
-           Jogador jogador = DadosJogadores.Jogadores.Find(x => x.Nome == nome);
-            if(jogador != null)           
+            Jogador jogador = DadosJogadores.Jogadores.Find(x => x.Nome == nome);
+            if (jogador != null)
                 Registro.MostrarHistoricoDePartidas(nome);
-            
+
             else
             {
                 Console.WriteLine("  Jogador não encontrado.");
@@ -125,11 +129,11 @@ namespace JogoDaVelha
         {
             Console.WriteLine(Arte.linha);
             Console.WriteLine("  Entrada inválida.");
-            System.Threading.Thread.Sleep(1200);
+            Thread.Sleep(1200);
             Console.Clear();
-         }
+        }
 
-        internal static void AperteEnterParaContinuar() 
+        internal static void AperteEnterParaContinuar()
         {
             Console.WriteLine(Arte.linha);
             Console.WriteLine("  Aperte enter para continuar");

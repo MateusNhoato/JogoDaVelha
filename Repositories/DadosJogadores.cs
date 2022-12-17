@@ -1,11 +1,14 @@
 ﻿using System.Globalization;
+using JogoDaVelha.Views;
+using JogoDaVelha.Entities;
+using JogoDaVelha.Controllers;
 
-namespace JogoDaVelha
+namespace JogoDaVelha.Repositories
 {
     internal class DadosJogadores
     {
         // lista de jogadores
-        public static List<Jogador> Jogadores = new List<Jogador>(); 
+        public static List<Jogador> Jogadores = new List<Jogador>();
 
 
 
@@ -20,7 +23,7 @@ namespace JogoDaVelha
             if (nome.Length > 1 && nome.Length <= 60)
             {
                 string[] input = nome.Split();
-                foreach(string s in input)
+                foreach (string s in input)
                 {
                     foreach (char c in s)
                     {
@@ -37,7 +40,7 @@ namespace JogoDaVelha
                 nome = textInfo.ToTitleCase(nome);
                 foreach (Jogador jogador in Jogadores)
                 {
-                    if(jogador.Nome == nome)
+                    if (jogador.Nome == nome)
                     {
                         Console.WriteLine("Jogador já cadastrado.");
                         Menu.AperteEnterParaContinuar();
@@ -55,17 +58,17 @@ namespace JogoDaVelha
                 Console.WriteLine("  Nomes devem conter entre 2 a 60 letras.");
                 Menu.AperteEnterParaContinuar();
             }
-           
+
         }
         // função para listar os jogadores
-        internal static void ListarTodosJogadores() 
+        internal static void ListarTodosJogadores()
         {
             Console.Clear();
             Console.WriteLine(Arte.jogadores + "\n");
-            if (Jogadores.Count > 0 )
+            if (Jogadores.Count > 0)
                 foreach (Jogador jogador in Jogadores)
                     Console.WriteLine(jogador);
-               
+
             else
                 Console.WriteLine("  Nenhum jogador cadastrado.");
 
@@ -82,20 +85,28 @@ namespace JogoDaVelha
             // lista em ordem de pontuação
             List<Jogador> jogadoresPorPontos = Jogadores.OrderBy(x => x.Pontuacao).ToList();
 
-            int index = jogadoresPorPontos.Count -1;
-            if(index > 2)
+            int index = jogadoresPorPontos.Count - 1;
+            if (index > 2)
             {
                 for (int i = index, j = 1; i > index - 3; i--, j++)
                 {
                     Jogador jogador = jogadoresPorPontos[i];
+
+                    if (jogador.Pontuacao <= 0)
+                        continue;
+
                     Console.WriteLine($"  Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
                 }
             }
             else
             {
-                for(int i=index,j=1; i >= 0; i--, j++)
+                for (int i = index, j = 1; i >= 0; i--, j++)
                 {
                     Jogador jogador = jogadoresPorPontos[i];
+
+                    if (jogador.Pontuacao <= 0)
+                        continue;
+
                     Console.WriteLine($"  Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
                 }
             }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JogoDaVelha
+namespace JogoDaVelha.Entities
 {
     internal struct Tabuleiro
     {
@@ -18,8 +18,8 @@ namespace JogoDaVelha
             set
             {
                 if (value >= 3 && value <= 100)
-                        _tamanhoDoTabuleiro = value * 2 - 1;
-                                      
+                    _tamanhoDoTabuleiro = value * 2 - 1;
+
                 else
                     Console.WriteLine("  Tamanho inválido.");
             }
@@ -65,7 +65,7 @@ namespace JogoDaVelha
         internal static void ListarJogadasPossiveis()
         {
             jogadasPossiveis = new List<string>();
-            for (int i = 1; i <= Math.Pow((TamanhoDoTabuleiro +1) / 2, 2); i++)
+            for (int i = 1; i <= Math.Pow((TamanhoDoTabuleiro + 1) / 2, 2); i++)
             {
                 jogadasPossiveis.Add($"{i}");
             }
@@ -87,10 +87,10 @@ namespace JogoDaVelha
         }
 
         // função para fazer uma string do tabuleiro para adicioná-lo no registro da partida
-        public static string  TabuleiroParaRegistro()
+        public static string TabuleiroParaRegistro()
         {
             string resultado = "";
-            foreach (string s  in tabuleiro)
+            foreach (string s in tabuleiro)
             {
                 resultado += $"{s},";
             }

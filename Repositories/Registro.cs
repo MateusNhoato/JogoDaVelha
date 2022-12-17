@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+﻿using JogoDaVelha.Entities;
+using JogoDaVelha.Views;
+using JogoDaVelha.Controllers;
 
-namespace JogoDaVelha
+namespace JogoDaVelha.Repositories
 {
     internal static class Registro
     {
         // função para checkar se há dados no arquivo e iniciar com eles caso existam
         internal static void AbrirDadosDosJogadoresAoIniciar()
         {
-            string pathDadosJogadores = @"..\..\..\Dados\DadosDosJogadores.txt";
+            string pathDadosJogadores = @"..\..\..\Data\DadosDosJogadores.txt";
 
             try
             {
@@ -43,19 +39,19 @@ namespace JogoDaVelha
             {
                 File.Create(pathDadosJogadores).Close();
             }
-          
+
         }
 
         // função para salvar os dados de todos os jogadores
         internal static void SalvarDadosDosJogadores()
         {
-            string pathDadosDosJogadores = @"..\..\..\Dados\DadosDosJogadores.txt";
+            string pathDadosDosJogadores = @"..\..\..\Data\DadosDosJogadores.txt";
 
 
             List<Jogador> jogadores = DadosJogadores.Jogadores;
             File.WriteAllText(pathDadosDosJogadores, string.Empty);
 
-            using(StreamWriter sw = new StreamWriter(pathDadosDosJogadores))
+            using (StreamWriter sw = new StreamWriter(pathDadosDosJogadores))
             {
                 foreach (Jogador jogador in jogadores)
                 {
@@ -67,8 +63,8 @@ namespace JogoDaVelha
         // função para salvar os resultados da partida (tabuleiro, jogadores, resultado)
         internal static void SalvarResultadoDaPartida(int tamanhoTabuleiro, string jogador1, string jogador2, string resultado)
         {
-            string pathRegistros = @"..\..\..\Dados\RegistroDasPartidas.txt";
-            string pathNumeroPartida = @"..\..\..\Dados\QuantidadeDePartidasJogadas.txt";
+            string pathRegistros = @"..\..\..\Data\RegistroDasPartidas.txt";
+            string pathNumeroPartida = @"..\..\..\Data\QuantidadeDePartidasJogadas.txt";
 
             int partidaDeNumero = 0;
 
@@ -80,38 +76,38 @@ namespace JogoDaVelha
                     partidaDeNumero = int.Parse(sr.ReadLine());
                 }
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 File.Create(pathNumeroPartida).Close();
 
             }
             // caso o arquivo esteja criado, porém vazio
-            catch(System.FormatException){}
+            catch (FormatException) { }
 
             // aumentando para a próxima partida
-            using (StreamWriter sw  = new StreamWriter(pathNumeroPartida, false))
+            using (StreamWriter sw = new StreamWriter(pathNumeroPartida, false))
             {
                 sw.WriteLine(partidaDeNumero + 1);
-            }           
-            
+            }
+
             // aumentando a variável para registrar a seguir
             partidaDeNumero++;
-            
+
             // registrando resutados
             using (StreamWriter sw = new StreamWriter(pathRegistros, true))
             {
                 sw.WriteLine($"{partidaDeNumero};{tamanhoTabuleiro};{Tabuleiro.TabuleiroParaRegistro()};{jogador1};{jogador2};{resultado}");
             }
 
-        }   
+        }
 
         // função para mostrar o resultado das partidas
         internal static void MostrarHistoricoDePartidas(string? nome)
         {
-            string path = @"..\..\..\Dados\RegistroDasPartidas.txt";
+            string path = @"..\..\..\Data\RegistroDasPartidas.txt";
             Console.Clear();
-            Console.WriteLine(Arte.historico +"\n");
-           
+            Console.WriteLine(Arte.historico + "\n");
+
             try
             {
                 // abrindo arquivo do histórico
@@ -130,9 +126,9 @@ namespace JogoDaVelha
                         string resultado = dados[5];
 
                         // caso a função seja chamada com um nome específico
-                        if(nome != null)
+                        if (nome != null)
                         {
-                            if(jogador1 != nome && jogador2 != nome)
+                            if (jogador1 != nome && jogador2 != nome)
                             {
                                 linha = sr.ReadLine();
                                 continue;
@@ -157,26 +153,26 @@ namespace JogoDaVelha
 
                         if (resultado == "X")
                             resultado = jogador1;
-                        else if( resultado == "O")
+                        else if (resultado == "O")
                             resultado = jogador2;
 
-                        if (resultado == "Velha")                      
-                            Console.WriteLine("\n  " + resultado);                       
+                        if (resultado == "Velha")
+                            Console.WriteLine("\n  " + resultado);
                         else
-                            Console.WriteLine($"\n  Vencedor: {resultado}");                      
+                            Console.WriteLine($"\n  Vencedor: {resultado}");
 
                         linha = sr.ReadLine();
                     }
-                
-                }                
+
+                }
             }
 
             // se o arquivo não existe, crio um e fecho ele
-            catch(FileNotFoundException) 
-            {               
+            catch (FileNotFoundException)
+            {
                 File.Create(path).Close();
             }
-        Menu.AperteEnterParaContinuar();
+            Menu.AperteEnterParaContinuar();
         }
 
     }
