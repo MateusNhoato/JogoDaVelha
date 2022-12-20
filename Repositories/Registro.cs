@@ -6,11 +6,14 @@ namespace JogoDaVelha.Repositories
 {
     internal static class Registro
     {
+        private static string pathDadosJogadores = @"..\..\..\Data\DadosDosJogadores.txt";
+        private static string pathRegistroPartidas = @"..\..\..\Data\RegistroDasPartidas.txt";
+        private static string pathNumeroPartida = @"..\..\..\Data\QuantidadeDePartidasJogadas.txt";
+
+
         // função para checkar se há dados no arquivo e iniciar com eles caso existam
         internal static void AbrirDadosDosJogadoresAoIniciar()
         {
-            string pathDadosJogadores = @"..\..\..\Data\DadosDosJogadores.txt";
-
             try
             {
                 using (StreamReader sr = new StreamReader(pathDadosJogadores))
@@ -45,13 +48,11 @@ namespace JogoDaVelha.Repositories
         // função para salvar os dados de todos os jogadores
         internal static void SalvarDadosDosJogadores()
         {
-            string pathDadosDosJogadores = @"..\..\..\Data\DadosDosJogadores.txt";
-
 
             List<Jogador> jogadores = DadosJogadores.Jogadores;
-            File.WriteAllText(pathDadosDosJogadores, string.Empty);
+            File.WriteAllText(pathDadosJogadores, string.Empty);
 
-            using (StreamWriter sw = new StreamWriter(pathDadosDosJogadores))
+            using (StreamWriter sw = new StreamWriter(pathDadosJogadores))
             {
                 foreach (Jogador jogador in jogadores)
                 {
@@ -61,10 +62,9 @@ namespace JogoDaVelha.Repositories
         }
 
         // função para salvar os resultados da partida (tabuleiro, jogadores, resultado)
-        internal static void SalvarResultadoDaPartida(int tamanhoTabuleiro, string jogador1, string jogador2, string resultado)
+        internal static void SalvarResultadoDaPartida(int tamanhoTabuleiro,Tabuleiro tabuleiro ,string jogador1, string jogador2, string resultado)
         {
-            string pathRegistros = @"..\..\..\Data\RegistroDasPartidas.txt";
-            string pathNumeroPartida = @"..\..\..\Data\QuantidadeDePartidasJogadas.txt";
+            
 
             int partidaDeNumero = 0;
 
@@ -94,24 +94,23 @@ namespace JogoDaVelha.Repositories
             partidaDeNumero++;
 
             // registrando resutados
-            using (StreamWriter sw = new StreamWriter(pathRegistros, true))
+            using (StreamWriter sw = new StreamWriter(pathRegistroPartidas, true))
             {
-                sw.WriteLine($"{partidaDeNumero};{tamanhoTabuleiro};{Tabuleiro.TabuleiroParaRegistro()};{jogador1};{jogador2};{resultado}");
+                sw.WriteLine($"{partidaDeNumero};{tamanhoTabuleiro};{TabuleiroParaRegistro(tabuleiro)};{jogador1};{jogador2};{resultado}");
             }
 
         }
 
-        // função para mostrar o resultado das partidas
+        // função para mostrar o resultado das partidas anteriores
         internal static void MostrarHistoricoDePartidas(string? nome)
         {
-            string path = @"..\..\..\Data\RegistroDasPartidas.txt";
             Console.Clear();
             Console.WriteLine(Arte.historico + "\n");
 
             try
             {
                 // abrindo arquivo do histórico
-                using (StreamReader sr = new StreamReader(path))
+                using (StreamReader sr = new StreamReader(pathRegistroPartidas))
                 {
                     string linha = sr.ReadLine();
                     while (!string.IsNullOrEmpty(linha))
@@ -170,10 +169,21 @@ namespace JogoDaVelha.Repositories
             // se o arquivo não existe, crio um e fecho ele
             catch (FileNotFoundException)
             {
-                File.Create(path).Close();
+                File.Create(pathRegistroPartidas).Close();
             }
             Menu.AperteEnterParaContinuar();
         }
 
+
+        // função para fazer uma string do tabuleiro para adicioná-lo no registro da partida
+        public static string TabuleiroParaRegistro(Tabuleiro tabuleiro)
+        {
+            string resultado = "";
+            foreach (string s in tabuleiro.tabuleiro)
+            {
+                resultado += $"{s},";
+            }
+            return resultado;
+        }
     }
 }

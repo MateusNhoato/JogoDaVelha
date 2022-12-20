@@ -2,31 +2,28 @@
 {
     internal class Jogador
     {
-        private string? _nome;
-        internal int QuantidadeVitorias = 0;
-        internal int QuantidadeDerrotas = 0;
-        internal int QuantidadeEmpates = 0;
+        public string Nome { get; private set; }
+        internal int QuantidadeVitorias { get; set; }
+        internal int QuantidadeDerrotas { get; set; }
+        internal int QuantidadeEmpates { get; set; }
 
-        public string? Nome
-        {
-            get { return _nome; }
-        }
+
 
         public int Pontuacao
         {
             get { return QuantidadeVitorias * 3 + QuantidadeEmpates + QuantidadeDerrotas * -1; }
         }
 
-        // construtor simples, para adicionar um jogo novo
+        // construtor simples, para adicionar um jogador novo
         internal Jogador(string nome)
         {
-            _nome = nome;
+            Nome = nome;
         }
 
-        // construtor mais completo, para colocar na lista de jogadores os jogadores do arquivo txt
+        // construtor mais completo, para colocar o jogador do arquivo txt na lista de jogadores
         internal Jogador(string nome, int vitorias, int empates, int derrotas)
         {
-            _nome = nome;
+            Nome = nome;
             QuantidadeVitorias = vitorias;
             QuantidadeEmpates = empates;
             QuantidadeDerrotas = derrotas;
@@ -35,7 +32,7 @@
 
         public override string ToString()
         {
-            return $"  Jogador: {_nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";
+            return $"  Jogador: {Nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";
         }
     }
 }

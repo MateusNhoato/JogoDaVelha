@@ -8,8 +8,7 @@ namespace JogoDaVelha.Repositories
     internal class DadosJogadores
     {
         // lista de jogadores
-        public static List<Jogador> Jogadores = new List<Jogador>();
-
+        public static List<Jogador> Jogadores { get; private set; } =  new List<Jogador>();
 
 
         // função para cadastrar jogador novo
@@ -35,6 +34,7 @@ namespace JogoDaVelha.Repositories
                         }
                     }
                 }
+
                 // após passar a validação, passar o nome para pascal case
                 TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
                 nome = textInfo.ToTitleCase(nome);

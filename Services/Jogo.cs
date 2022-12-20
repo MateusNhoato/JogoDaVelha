@@ -1,6 +1,4 @@
 ﻿
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography.X509Certificates;
 using JogoDaVelha.Controllers;
 using JogoDaVelha.Entities;
 using JogoDaVelha.Repositories;
@@ -10,16 +8,16 @@ namespace JogoDaVelha.Services
     internal class Jogo
     {
         // função de jogada de cada jogador
-        internal static bool Jogada(string jogada, string jogador)
+        internal static bool Jogada(string jogada, string jogador, Tabuleiro tabuleiro)
         {
 
-            for (int i = 0; i < Tabuleiro.TamanhoDoTabuleiro; i++)
+            for (int i = 0; i < tabuleiro.TamanhoDoTabuleiro; i++)
             {
-                for (int j = 0; j < Tabuleiro.TamanhoDoTabuleiro; j++)
+                for (int j = 0; j < tabuleiro.TamanhoDoTabuleiro; j++)
                 {
-                    if (Tabuleiro.tabuleiro[i, j].Trim() == jogada)
+                    if (tabuleiro.tabuleiro[i, j].Trim() == jogada)
                     {
-                        Tabuleiro.tabuleiro[i, j] = jogador;
+                        tabuleiro.tabuleiro[i, j] = jogador;
                         return true;
                     }
                 }
@@ -29,9 +27,15 @@ namespace JogoDaVelha.Services
 
 
         // função para checkar se alguém ganhou ou deu velha
-        internal static string? CheckarVitoriaOuVelha()
+        internal static string? CheckarVitoriaOuVelha(Tabuleiro tabuleiro)
         {
-            int tamanhoAuxiliar = (Tabuleiro.TamanhoDoTabuleiro + 1) / 2;
+            // para haver um vencedor precisamos de pelo menos (x * 2 - 1) jogadas, o que é o tamanho do tabuleiro.
+            // logo, se não houve esse numero de jogadas ainda não houve vencedor, retorno null
+            if (tabuleiro.jogadasPossiveis.Count >= tabuleiro.TamanhoDoTabuleiro)              
+                return null;
+                         
+
+            int tamanhoAuxiliar = (tabuleiro.TamanhoDoTabuleiro + 1) / 2;
 
             string[] valoresNaDiagonalPrincipal = new string[tamanhoAuxiliar];
             string[] valoresNaDiagonalSecundaria = new string[tamanhoAuxiliar];
@@ -42,21 +46,21 @@ namespace JogoDaVelha.Services
 
             // lista das colunas
             List<string[]> colunas = new List<string[]>();
-            for (int i = 0; i < Tabuleiro.TamanhoDoTabuleiro + 1; i += 2)
+            for (int i = 0; i < tabuleiro.TamanhoDoTabuleiro + 1; i += 2)
             {
                 colunas.Add(new string[tamanhoAuxiliar]);
             }
 
             // loop de checkagem
-            for (int i = 0; i < Tabuleiro.TamanhoDoTabuleiro; i += 2)
+            for (int i = 0; i < tabuleiro.TamanhoDoTabuleiro; i += 2)
             {
 
                 string[] valoresNaLinha = new string[tamanhoAuxiliar];
 
-                for (int j = 0; j < Tabuleiro.TamanhoDoTabuleiro; j += 2)
+                for (int j = 0; j < tabuleiro.TamanhoDoTabuleiro; j += 2)
                 {
                     // utilizando o .Trim() pois usei espaços no X e na O para ficar com espaçamento
-                    string valor = Tabuleiro.tabuleiro[i, j].Trim();
+                    string valor = tabuleiro.tabuleiro[i, j].Trim();
 
                     int posicaoAuxiliarParaVetoresJ = (int)Math.Floor(j / 2.0);
                     int posicaoAuxiliarParaVetoresI = (int)Math.Floor(i / 2.0);
@@ -75,7 +79,7 @@ namespace JogoDaVelha.Services
                     }
 
                     // adicionando os valores nas colunas                   
-                    colunas[posicaoAuxiliarParaVetoresI][posicaoAuxiliarParaVetoresJ] = Tabuleiro.tabuleiro[j, i].Trim();
+                    colunas[posicaoAuxiliarParaVetoresI][posicaoAuxiliarParaVetoresJ] = tabuleiro.tabuleiro[j, i].Trim();
                 }
                 // checkando os valores únicos da linha
                 valoresNaLinha = valoresNaLinha.Distinct().ToArray();
@@ -103,7 +107,7 @@ namespace JogoDaVelha.Services
             }
 
             // checkando velha
-            if (Tabuleiro.jogadasPossiveis.Count == 0)
+            if (tabuleiro.jogadasPossiveis.Count == 0)
                 return "Velha";
 
 
@@ -130,10 +134,8 @@ namespace JogoDaVelha.Services
                 }
             } while (true);
 
-            // configurando o tabuleiro e gerando lista de jogadas possíveis
-            Tabuleiro.TamanhoDoTabuleiro = tamanho;
-            Tabuleiro.GerarTabuleiro();
-            Tabuleiro.ListarJogadasPossiveis();
+            // gerando o tabuleiro
+            Tabuleiro tabuleiro = new Tabuleiro(tamanho);
 
             // começando pelo jogador1 como X
             Jogador jogador = jogador1;
@@ -145,22 +147,22 @@ namespace JogoDaVelha.Services
                 do
                 {
                     Console.Clear();
-                    Tabuleiro.MostrarTabuleiro();
+                    tabuleiro.MostrarTabuleiro();
                     Console.WriteLine($"\n  Vez de {jogador.Nome}\n");
                     Console.Write($"  Digite a posição da jogada ({jogada.Trim()}): ");
                     posicao = Console.ReadLine();
-                } while (!Tabuleiro.jogadasPossiveis.Contains(posicao));
+                } while (!tabuleiro.jogadasPossiveis.Contains(posicao));
 
                 // removendo a jogada das jogadas possíveis e chamando a função Jogada que muda o tabuleiro
-                Tabuleiro.jogadasPossiveis.Remove(posicao);
-                Jogada(posicao, jogada);
+                tabuleiro.jogadasPossiveis.Remove(posicao);
+                Jogada(posicao, jogada, tabuleiro);
 
                 // chamando a função de checkar vitória após cada jogada válida
-                vencedor = CheckarVitoriaOuVelha();
+                vencedor = CheckarVitoriaOuVelha(tabuleiro);
                 if (vencedor != null)
                 {
                     Console.Clear();
-                    Tabuleiro.MostrarTabuleiro();
+                    tabuleiro.MostrarTabuleiro();
 
                     string jog1 = jogador1.Nome;
                     string jog2 = jogador2.Nome;
@@ -191,7 +193,7 @@ namespace JogoDaVelha.Services
                     Registro.SalvarDadosDosJogadores();
 
                     // salvando a partida
-                    Registro.SalvarResultadoDaPartida(Tabuleiro.TamanhoDoTabuleiro, jog1, jog2, vencedor);
+                    Registro.SalvarResultadoDaPartida(tabuleiro.TamanhoDoTabuleiro,tabuleiro,jog1, jog2, vencedor);
 
                     Menu.AperteEnterParaContinuar();
                     break;
