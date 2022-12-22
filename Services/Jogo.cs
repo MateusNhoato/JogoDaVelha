@@ -28,12 +28,7 @@ namespace JogoDaVelha.Services
 
         // função para checkar se alguém ganhou ou deu velha
         internal static string? CheckarVitoriaOuVelha(Tabuleiro tabuleiro)
-        {
-            // para haver um vencedor precisamos de pelo menos (x * 2 - 1) jogadas, o que é o tamanho do tabuleiro.
-            // logo, se não houve esse numero de jogadas ainda não houve vencedor, retorno null
-            if (tabuleiro.jogadasPossiveis.Count >= tabuleiro.TamanhoDoTabuleiro)              
-                return null;
-                         
+        {                       
 
             int tamanhoAuxiliar = (tabuleiro.TamanhoDoTabuleiro + 1) / 2;
 
@@ -171,22 +166,22 @@ namespace JogoDaVelha.Services
                     if (vencedor == "Velha")
                     {
                         Console.WriteLine("\n  Deu velha. Empate.");
-                        jogador1.QuantidadeEmpates += 1;
-                        jogador2.QuantidadeEmpates += 1;
+                        jogador1.AumentarEmpates();
+                        jogador2.AumentarEmpates();
 
                     }
                     // se retornar algo que não seja null e nem velha, teve um vencedor (x ou o)
                     else
                     {
                         Console.WriteLine($"\n  Vencedor: {jogador.Nome} ({vencedor}).");
-                        jogador.QuantidadeVitorias += 1;
+                        jogador.AumentarVitorias();
 
                         // alterando quantidade de derrotas do perdedor
                         if (jogador == jogador1)
-                            jogador2.QuantidadeDerrotas += 1;
+                            jogador2.AumentarDerrotas();
 
                         else
-                            jogador1.QuantidadeDerrotas += 1;
+                            jogador1.AumentarDerrotas();
 
                     }
                     // salvando os dados dos jogadores

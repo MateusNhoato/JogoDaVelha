@@ -80,7 +80,14 @@
                 Console.Write("   ");
                 for (int j = 0; j < TamanhoDoTabuleiro; j++)
                 {
+                    ConsoleColor aux = Console.ForegroundColor;
+                    if (tabuleiro[i, j].Trim() == "X")
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    else if (tabuleiro[i, j].Trim() == "O")
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+
                     Console.Write(tabuleiro[i, j]);
+                    Console.ForegroundColor = aux;
                 }
                 Console.WriteLine();
             }

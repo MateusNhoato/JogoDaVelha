@@ -63,9 +63,7 @@ namespace JogoDaVelha.Repositories
 
         // função para salvar os resultados da partida (tabuleiro, jogadores, resultado)
         internal static void SalvarResultadoDaPartida(int tamanhoTabuleiro,Tabuleiro tabuleiro ,string jogador1, string jogador2, string resultado)
-        {
-            
-
+        {            
             int partidaDeNumero = 0;
 
             // abrindo e lendo o arquivo
@@ -144,7 +142,18 @@ namespace JogoDaVelha.Repositories
                             Console.Write("  ");
                             for (int j = 0; j < tamanhoTabuleiro; j++)
                             {
-                                Console.Write(tabuleiro[cont]);
+
+                                ConsoleColor aux = Console.ForegroundColor;
+                                if (tabuleiro[cont].Trim() == "X")
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                else if (tabuleiro[cont].Trim() == "O")
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+
+                                if (tabuleiro[cont].Trim() == "1")
+                                    Console.Write("   ");
+                                else
+                                    Console.Write(tabuleiro[cont]);
+                                Console.ForegroundColor = aux;
                                 cont++;
                             }
                             Console.WriteLine();
@@ -181,7 +190,11 @@ namespace JogoDaVelha.Repositories
             string resultado = "";
             foreach (string s in tabuleiro.tabuleiro)
             {
-                resultado += $"{s},";
+                int n;
+                if (int.TryParse(s, out n))
+                    resultado += "1,";
+                else
+                    resultado += $"{s},";
             }
             return resultado;
         }

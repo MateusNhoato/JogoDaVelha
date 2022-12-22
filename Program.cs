@@ -1,4 +1,5 @@
 ﻿using JogoDaVelha.Controllers;
+using JogoDaVelha.Entities;
 using JogoDaVelha.Repositories;
 
 namespace JogoDaVelha
@@ -12,6 +13,7 @@ namespace JogoDaVelha
             Console.Title = "Jogo da Velha";
             Console.Clear();
 
+            
             Registro.AbrirDadosDosJogadoresAoIniciar();
             Menu.MostrarMenu();
         }

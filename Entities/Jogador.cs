@@ -1,11 +1,11 @@
 ﻿namespace JogoDaVelha.Entities
 {
-    internal class Jogador
+    internal class Jogador : IComparable<Jogador>
     {
         public string Nome { get; private set; }
-        internal int QuantidadeVitorias { get; set; }
-        internal int QuantidadeDerrotas { get; set; }
-        internal int QuantidadeEmpates { get; set; }
+        internal int QuantidadeVitorias { get; private set; }
+        internal int QuantidadeDerrotas { get; private set; }
+        internal int QuantidadeEmpates { get; private set; }
 
 
 
@@ -29,10 +29,30 @@
             QuantidadeDerrotas = derrotas;
         }
 
+        internal void AumentarVitorias()
+        {
+            QuantidadeVitorias++;
+        }
+
+        internal void AumentarDerrotas()
+        {
+            QuantidadeDerrotas++;
+        }
+
+        internal void AumentarEmpates()
+        {
+            QuantidadeEmpates++;
+        }
+
 
         public override string ToString()
         {
             return $"  Jogador: {Nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";
+        }
+
+        public int CompareTo(Jogador? other)
+        {
+            return Pontuacao.CompareTo(other.Pontuacao);
         }
     }
 }

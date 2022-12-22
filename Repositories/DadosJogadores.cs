@@ -83,7 +83,8 @@ namespace JogoDaVelha.Repositories
             Console.WriteLine(Arte.hallDaFama + "\n");
 
             // lista em ordem de pontuação
-            List<Jogador> jogadoresPorPontos = Jogadores.OrderBy(x => x.Pontuacao).ToList();
+            List<Jogador> jogadoresPorPontos = Jogadores.Select(x => new Jogador(x.Nome,x.QuantidadeVitorias, x.QuantidadeEmpates, x.QuantidadeDerrotas)).ToList();
+            jogadoresPorPontos.Sort();
 
             int index = jogadoresPorPontos.Count - 1;
             if (index > 2)
