@@ -6,6 +6,7 @@ namespace JogoDaVelha.Repositories
 {
     internal static class Registro
     {
+        // paths para os arquivos
         private static string pathDadosJogadores = @"..\..\..\Data\DadosDosJogadores.txt";
         private static string pathRegistroPartidas = @"..\..\..\Data\RegistroDasPartidas.txt";
         private static string pathNumeroPartida = @"..\..\..\Data\QuantidadeDePartidasJogadas.txt";
@@ -142,7 +143,7 @@ namespace JogoDaVelha.Repositories
                             Console.Write("  ");
                             for (int j = 0; j < tamanhoTabuleiro; j++)
                             {
-
+      
                                 ConsoleColor aux = Console.ForegroundColor;
                                 if (tabuleiro[cont].Trim() == "X")
                                     Console.ForegroundColor = ConsoleColor.DarkBlue;

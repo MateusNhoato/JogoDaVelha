@@ -47,7 +47,7 @@
 
         public override string ToString()
         {
-            return $"  Jogador: {Nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";
+            return $"  {Nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";
         }
 
         public int CompareTo(Jogador? other)

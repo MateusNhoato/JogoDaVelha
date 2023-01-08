@@ -2,13 +2,14 @@
 using JogoDaVelha.Views;
 using JogoDaVelha.Entities;
 using JogoDaVelha.Controllers;
+using System.Linq;
 
 namespace JogoDaVelha.Repositories
 {
     internal class DadosJogadores
     {
         // lista de jogadores
-        public static List<Jogador> Jogadores { get; private set; } =  new List<Jogador>();
+        public static List<Jogador> Jogadores { get; private set; } = new List<Jogador>();
 
 
         // função para cadastrar jogador novo
@@ -83,35 +84,24 @@ namespace JogoDaVelha.Repositories
             Console.WriteLine(Arte.hallDaFama + "\n");
 
             // lista em ordem de pontuação
-            List<Jogador> jogadoresPorPontos = Jogadores.Select(x => new Jogador(x.Nome,x.QuantidadeVitorias, x.QuantidadeEmpates, x.QuantidadeDerrotas)).ToList();
-            jogadoresPorPontos.Sort();
+            List<Jogador> jogadoresPorPontos = Jogadores.Select(x => new Jogador(x.Nome, x.QuantidadeVitorias, x.QuantidadeEmpates, x.QuantidadeDerrotas)).OrderByDescending(x => x.Pontuacao).ThenBy(x =>x.QuantidadeVitorias).ThenByDescending(x => x.QuantidadeDerrotas).ToList();
 
-            int index = jogadoresPorPontos.Count - 1;
-            if (index > 2)
+            int index = jogadoresPorPontos.Count;
+
+            for (int i = 0; i < index; i++)
             {
-                for (int i = index, j = 1; i > index - 3; i--, j++)
-                {
-                    Jogador jogador = jogadoresPorPontos[i];
+                Jogador jogador = jogadoresPorPontos[i];
 
-                    if (jogador.Pontuacao <= 0)
-                        continue;
+                if (jogador.Pontuacao <= 0)
+                    continue;
 
-                    Console.WriteLine($"  Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
-                }
-            }
-            else
-            {
-                for (int i = index, j = 1; i >= 0; i--, j++)
-                {
-                    Jogador jogador = jogadoresPorPontos[i];
-
-                    if (jogador.Pontuacao <= 0)
-                        continue;
-
-                    Console.WriteLine($"  Top {j}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
-                }
+                Console.WriteLine($"  Top {i+1}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
+                if (i >= 2)
+                    break;
             }
             Menu.AperteEnterParaContinuar();
         }
+
+
     }
 }

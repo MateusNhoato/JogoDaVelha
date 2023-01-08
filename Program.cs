@@ -13,7 +13,6 @@ namespace JogoDaVelha
             Console.Title = "Jogo da Velha";
             Console.Clear();
 
-            
             Registro.AbrirDadosDosJogadoresAoIniciar();
             Menu.MostrarMenu();
         }
