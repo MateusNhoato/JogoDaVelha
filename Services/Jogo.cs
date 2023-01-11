@@ -2,33 +2,32 @@
 using JogoDaVelha.Controllers;
 using JogoDaVelha.Entities;
 using JogoDaVelha.Repositories;
+using JogoDaVelha.Views;
 
 namespace JogoDaVelha.Services
 {
     internal class Jogo
     {
         // função de jogada de cada jogador
-        internal static bool Jogada(string jogada, string jogador, Tabuleiro tabuleiro)
+        internal static void Jogada(string jogada, string jogador, Tabuleiro tabuleiro)
         {
 
             for (int i = 0; i < tabuleiro.TamanhoDoTabuleiro; i++)
             {
                 for (int j = 0; j < tabuleiro.TamanhoDoTabuleiro; j++)
                 {
-                    if (tabuleiro.tabuleiro[i, j].Trim() == jogada)
+                    if (tabuleiro.MatrizTabuleiro[i, j].Trim() == jogada)
                     {
-                        tabuleiro.tabuleiro[i, j] = jogador;
-                        return true;
+                        tabuleiro.MatrizTabuleiro[i, j] = jogador;                        
                     }
                 }
             }
-            return false;
         }
 
 
         // função para checkar se alguém ganhou ou deu velha
         internal static string? CheckarVitoriaOuVelha(Tabuleiro tabuleiro)
-        {                       
+        {
 
             int tamanhoAuxiliar = (tabuleiro.TamanhoDoTabuleiro + 1) / 2;
 
@@ -55,7 +54,7 @@ namespace JogoDaVelha.Services
                 for (int j = 0; j < tabuleiro.TamanhoDoTabuleiro; j += 2)
                 {
                     // utilizando o .Trim() pois usei espaços no X e na O para ficar com espaçamento
-                    string valor = tabuleiro.tabuleiro[i, j].Trim();
+                    string valor = tabuleiro.MatrizTabuleiro[i, j].Trim();
 
                     int posicaoAuxiliarParaVetoresJ = (int)Math.Floor(j / 2.0);
                     int posicaoAuxiliarParaVetoresI = (int)Math.Floor(i / 2.0);
@@ -74,7 +73,7 @@ namespace JogoDaVelha.Services
                     }
 
                     // adicionando os valores nas colunas                   
-                    colunas[posicaoAuxiliarParaVetoresI][posicaoAuxiliarParaVetoresJ] = tabuleiro.tabuleiro[j, i].Trim();
+                    colunas[posicaoAuxiliarParaVetoresI][posicaoAuxiliarParaVetoresJ] = tabuleiro.MatrizTabuleiro[j, i].Trim();
                 }
                 // checkando os valores únicos da linha
                 valoresNaLinha = valoresNaLinha.Distinct().ToArray();
@@ -102,7 +101,7 @@ namespace JogoDaVelha.Services
             }
 
             // checkando velha
-            if (tabuleiro.jogadasPossiveis.Count == 0)
+            if (tabuleiro.JogadasPossiveis.Count == 0)
                 return "Velha";
 
 
@@ -142,27 +141,43 @@ namespace JogoDaVelha.Services
                 do
                 {
                     Console.Clear();
-                    tabuleiro.MostrarTabuleiro();
+                    Tela.ImprimirTabuleiro(tabuleiro);
                     Console.WriteLine($"\n  Vez de {jogador.Nome}\n");
                     Console.Write($"  Digite a posição da jogada ({jogada.Trim()}): ");
                     posicao = Console.ReadLine();
-                } while (!tabuleiro.jogadasPossiveis.Contains(posicao));
+                } while (!tabuleiro.JogadasPossiveis.Contains(posicao));
 
                 // removendo a jogada das jogadas possíveis e chamando a função Jogada que muda o tabuleiro
-                tabuleiro.jogadasPossiveis.Remove(posicao);
+                tabuleiro.JogadasPossiveis.Remove(posicao);
                 Jogada(posicao, jogada, tabuleiro);
 
                 // chamando a função de checkar vitória após cada jogada válida
                 vencedor = CheckarVitoriaOuVelha(tabuleiro);
-                if (vencedor != null)
+
+                // se vencedor == null (ninguém ganhou), a vez passa para o próximo jogador
+                if (vencedor == null)
+                {
+                    // trocando o jogador, alternando as jogadas
+                    if (jogador == jogador1)
+                    {
+                        jogador = jogador2;
+                        jogada = " O ";
+                    }
+                    else
+                    {
+                        jogador = jogador1;
+                        jogada = " X ";
+                    }
+                }
+                else
                 {
                     Console.Clear();
-                    tabuleiro.MostrarTabuleiro();
+                    Tela.ImprimirTabuleiro(tabuleiro);
 
                     string jog1 = jogador1.Nome;
                     string jog2 = jogador2.Nome;
 
-                    // CheckarVitoriaOuVelha retorou velha 
+                    // CheckarVitoriaOuVelha retornou velha 
                     if (vencedor == "Velha")
                     {
                         Console.WriteLine("\n  Deu velha. Empate.");
@@ -187,24 +202,14 @@ namespace JogoDaVelha.Services
                     // salvando os dados dos jogadores
                     Registro.SalvarDadosDosJogadores();
 
-                    // salvando a partida
-                    Registro.SalvarResultadoDaPartida(tabuleiro.TamanhoDoTabuleiro,tabuleiro,jog1, jog2, vencedor);
+                    // salvando a partida                 
+                    Registro.SalvarResultadoDaPartida(new Partida(tabuleiro.TamanhoDoTabuleiro, tabuleiro, jog1, jog2, vencedor));
 
                     Menu.AperteEnterParaContinuar();
                     break;
                 }
 
-                // trocando o jogador, alternando as jogadas
-                if (jogador == jogador1)
-                {
-                    jogador = jogador2;
-                    jogada = " O ";
-                }
-                else
-                {
-                    jogador = jogador1;
-                    jogada = " X ";
-                }
+
             }
         }
 

@@ -1,24 +1,24 @@
-﻿using System.Globalization;
-using JogoDaVelha.Views;
+﻿using JogoDaVelha.Controllers;
 using JogoDaVelha.Entities;
-using JogoDaVelha.Controllers;
-using System.Linq;
+using JogoDaVelha.Services;
+using JogoDaVelha.Views;
+using System.Globalization;
 
 namespace JogoDaVelha.Repositories
 {
     internal class DadosJogadores
     {
         // lista de jogadores
-        public static List<Jogador> Jogadores { get; private set; } = new List<Jogador>();
+        private static List<Jogador> _jogadores = new List<Jogador>();
+
+        public static List<Jogador> Jogadores { get { return _jogadores; } }
 
 
         // função para cadastrar jogador novo
         internal static void CadastrarJogador()
         {
-            Console.Clear();
-            Console.WriteLine(Arte.adicionarJogador + "\n");
-            Console.Write("  Digite o nome do jogador: ");
-            string? nome = Console.ReadLine();
+            Tela.ImprimirCadastrarJogador();            
+            string? nome = Menu.LerNomeEPassarParaPascalCase();
 
             if (nome.Length > 1 && nome.Length <= 60)
             {
@@ -35,11 +35,8 @@ namespace JogoDaVelha.Repositories
                         }
                     }
                 }
-
-                // após passar a validação, passar o nome para pascal case
-                TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
-                nome = textInfo.ToTitleCase(nome);
-                foreach (Jogador jogador in Jogadores)
+                
+                foreach (Jogador jogador in _jogadores)
                 {
                     if (jogador.Nome == nome)
                     {
@@ -49,7 +46,7 @@ namespace JogoDaVelha.Repositories
                     }
                 }
                 Jogador novoJogador = new Jogador(nome);
-                Jogadores.Add(novoJogador);
+                _jogadores.Add(novoJogador);
                 Registro.SalvarDadosDosJogadores();
                 Console.WriteLine("\n  Jogador cadastrado com sucesso!");
                 Menu.AperteEnterParaContinuar();
@@ -61,47 +58,33 @@ namespace JogoDaVelha.Repositories
             }
 
         }
-        // função para listar os jogadores
-        internal static void ListarTodosJogadores()
+        // sobrecarga da função CadastrarJogador, usado para cadastrar jogadores que já estavam salvos no arquivo txt
+        internal static void CadastrarJogador(Jogador jogador)
         {
-            Console.Clear();
-            Console.WriteLine(Arte.jogadores + "\n");
-            if (Jogadores.Count > 0)
-                foreach (Jogador jogador in Jogadores)
-                    Console.WriteLine(jogador);
-
-            else
-                Console.WriteLine("  Nenhum jogador cadastrado.");
-
-            Console.WriteLine("\n  Obs: Vitórias = 3pts | Empates = 1pt | Derrotas = -1pt.");
-            Menu.AperteEnterParaContinuar();
+            _jogadores.Add(jogador);
         }
 
-        // função hall da fama
-        internal static void HallDaFama()
+        // função para achar jogadores pelos seus nomes para Jogar
+        internal static void AcharJogadoresParaJogo(string nomePrimeiroJogador, string nomeSegundoJogador)
         {
-            Console.Clear();
-            Console.WriteLine(Arte.hallDaFama + "\n");
+            Jogador? primeiroJogador = DadosJogadores._jogadores.Find(x => x.Nome == nomePrimeiroJogador);
+            Jogador? segundoJogador = DadosJogadores._jogadores.Find(x => x.Nome == nomeSegundoJogador);
 
-            // lista em ordem de pontuação
-            List<Jogador> jogadoresPorPontos = Jogadores.Select(x => new Jogador(x.Nome, x.QuantidadeVitorias, x.QuantidadeEmpates, x.QuantidadeDerrotas)).OrderByDescending(x => x.Pontuacao).ThenBy(x =>x.QuantidadeVitorias).ThenByDescending(x => x.QuantidadeDerrotas).ToList();
-
-            int index = jogadoresPorPontos.Count;
-
-            for (int i = 0; i < index; i++)
+            if (primeiroJogador != null && segundoJogador != null)
             {
-                Jogador jogador = jogadoresPorPontos[i];
-
-                if (jogador.Pontuacao <= 0)
-                    continue;
-
-                Console.WriteLine($"  Top {i+1}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
-                if (i >= 2)
-                    break;
+                if (primeiroJogador != segundoJogador)
+                    Jogo.Jogar(primeiroJogador, segundoJogador);
+                else
+                {
+                    Console.WriteLine("\n  Um Jogador não pode jogar contra si mesmo.");
+                    Menu.AperteEnterParaContinuar();
+                }
             }
-            Menu.AperteEnterParaContinuar();
+            else
+            {
+                Console.WriteLine("\n  Jogador(es) inválido(s)");
+                Menu.AperteEnterParaContinuar();
+            }
         }
-
-
     }
 }

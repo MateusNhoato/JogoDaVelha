@@ -1,6 +1,6 @@
 ﻿namespace JogoDaVelha.Entities
 {
-    internal class Jogador : IComparable<Jogador>
+    internal class Jogador
     {
         public string Nome { get; private set; }
         internal int QuantidadeVitorias { get; private set; }
@@ -11,7 +11,7 @@
 
         public int Pontuacao
         {
-            get { return QuantidadeVitorias * 3 + QuantidadeEmpates + QuantidadeDerrotas * -1; }
+            get { return QuantidadeVitorias * 3 + QuantidadeEmpates - QuantidadeDerrotas; }
         }
 
         // construtor simples, para adicionar um jogador novo
@@ -20,7 +20,7 @@
             Nome = nome;
         }
 
-        // construtor mais completo, para colocar o jogador do arquivo txt na lista de jogadores
+        // construtor completo, para colocar o jogador do arquivo txt na lista de jogadores
         internal Jogador(string nome, int vitorias, int empates, int derrotas)
         {
             Nome = nome;
@@ -48,11 +48,6 @@
         public override string ToString()
         {
             return $"  {Nome} | Pontuação: {Pontuacao} | {QuantidadeVitorias}V/{QuantidadeEmpates}E/{QuantidadeDerrotas}D\n";
-        }
-
-        public int CompareTo(Jogador? other)
-        {
-            return Pontuacao.CompareTo(other.Pontuacao);
         }
     }
 }

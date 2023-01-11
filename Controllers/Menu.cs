@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using JogoDaVelha.Entities;
-using JogoDaVelha.Repositories;
-using JogoDaVelha.Services;
+﻿using JogoDaVelha.Repositories;
 using JogoDaVelha.Views;
+using System.Globalization;
 
 namespace JogoDaVelha.Controllers
 {
@@ -20,19 +12,8 @@ namespace JogoDaVelha.Controllers
             string? opcao;
             do
             {
-                Console.Clear();
-                Console.WriteLine(Arte.titulo + "\n");
-
-                Console.WriteLine("  1 - Jogar");
-                Console.WriteLine("  2 - Adicionar jogadores");
-                Console.WriteLine("  3 - Listar jogadores");
-                Console.WriteLine("  4 - Histórico de partidas");
-                Console.WriteLine("  5 - Histórico do Jogador");
-                Console.WriteLine("  6 - Hall da fama");
-                Console.WriteLine("  0 - Encerrar o programa");
-                Console.Write("\n  Digite a opção desejada: ");
+                Tela.ImprimirMenuPrincipal();
                 opcao = Console.ReadLine();
-
                 switch (opcao)
                 {
                     case "0":
@@ -47,7 +28,7 @@ namespace JogoDaVelha.Controllers
                         break;
 
                     case "3":
-                        DadosJogadores.ListarTodosJogadores();
+                        Tela.ImprimirListaDosJogadores(DadosJogadores.Jogadores);
                         break;
 
                     case "4":
@@ -55,11 +36,12 @@ namespace JogoDaVelha.Controllers
                         break;
 
                     case "5":
-                        MostrarHistoricoDeJogador();
+                        Tela.ImprimirHistoricoDeJogador(true);
+                        Registro.MostrarHistoricoDePartidas(LerNomeEPassarParaPascalCase());
                         break;
 
                     case "6":
-                        DadosJogadores.HallDaFama();
+                        Tela.ImprimirHallDaFama(DadosJogadores.Jogadores);
                         break;
 
                     default:
@@ -75,54 +57,27 @@ namespace JogoDaVelha.Controllers
         // validar e passar jogadores válidos para função jogar na classe jogo
         private static void PassarJogadoresParaJogo()
         {
-            Console.Clear();
-            // passar os nomes para pascal case
-            TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
-            Console.WriteLine(Arte.jogar);
-            Console.Write("  Player 1 (X): ");
-            string? nomePrimeiroJogador = Console.ReadLine();
-            nomePrimeiroJogador = textInfo.ToTitleCase(nomePrimeiroJogador);
-            Jogador? primeiroJogador = DadosJogadores.Jogadores.Find(x => x.Nome == nomePrimeiroJogador);
+            Tela.ImprimirJogar();
 
-            Console.Write("  Player 2 (O): ");
-            string? nomeSegundoJogador = Console.ReadLine();
-            nomeSegundoJogador = textInfo.ToTitleCase(nomeSegundoJogador);
-            Jogador? segundoJogador = DadosJogadores.Jogadores.Find(x => x.Nome == nomeSegundoJogador);
+            Tela.ImprimirJogadores("X");
+            string? nomePrimeiroJogador = LerNomeEPassarParaPascalCase();
+            Tela.ImprimirJogadores("O");
+            string? nomeSegundoJogador = LerNomeEPassarParaPascalCase();
 
-            if (primeiroJogador != null && segundoJogador != null && primeiroJogador != segundoJogador)
-            {
-                Jogo.Jogar(primeiroJogador, segundoJogador);
-            }
-            else
-            {
-                Console.WriteLine("\n  Jogador(es) inválido(s)");
-                AperteEnterParaContinuar();
-            }
-        }
+            DadosJogadores.AcharJogadoresParaJogo(nomePrimeiroJogador, nomeSegundoJogador);
 
-        // função para validar se o jogador passado existe,  passando para a função na classe registro
-        private static void MostrarHistoricoDeJogador()
+        }       
+      
+
+        // função para passar um nome para pascal case
+        internal static string LerNomeEPassarParaPascalCase()
         {
-            Console.Clear();
-            Console.WriteLine(Arte.historico + "\n");
-            Console.Write("  Digitar o nome do jogador: ");
-            string nome = Console.ReadLine();
-
-            // passar o nome para pascal case
             TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
+            string nome = Console.ReadLine();            
             nome = textInfo.ToTitleCase(nome);
 
-            Jogador jogador = DadosJogadores.Jogadores.Find(x => x.Nome == nome);
-            if (jogador != null)
-                Registro.MostrarHistoricoDePartidas(nome);
-
-            else
-            {
-                Console.WriteLine("  Jogador não encontrado.");
-                AperteEnterParaContinuar();
-            }
+            return nome;
         }
-
 
         // funções utilitária para comunicação com usuário
         internal static void EntradaInvalida()

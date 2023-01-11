@@ -2,33 +2,39 @@
 {
     internal class Tabuleiro
     {
-        internal string[,] tabuleiro { get; private set; }
-        internal List<string> jogadasPossiveis { get; private set; }
+        internal string[,] MatrizTabuleiro { get; private set; }
+        public List<string> JogadasPossiveis { get; private set; }
         private static int _tamanhoDoTabuleiro;
 
 
-
+        // construtor para tabuleiro novo
         public Tabuleiro(int tamanho)
         {
-           // configurando o tabuleiro e gerando lista de jogadas possíveis
+            // configurando o tabuleiro e gerando lista de jogadas possíveis
             TamanhoDoTabuleiro = tamanho;
             GerarTabuleiro();
             ListarJogadasPossiveis();
 
         }
+        // construtor para tabuleiro de registro
+        public Tabuleiro(string[,] matrizTabuleiro, int tamanhoDoTabuleiro)
+        {
+            MatrizTabuleiro = matrizTabuleiro;
+            TamanhoDoTabuleiro = (tamanhoDoTabuleiro +1) /2;
+        }
 
         internal int TamanhoDoTabuleiro
         {
             get { return _tamanhoDoTabuleiro; }
-            set {_tamanhoDoTabuleiro = value * 2 - 1;}
+            set { _tamanhoDoTabuleiro = value * 2 - 1; }
         }
 
 
-        // função para gerar tabuleiro de 3 até 10 
-        internal void GerarTabuleiro()
+        // função para gerar o tabuleiro de 3 até 10 
+        private void GerarTabuleiro()
         {
             int cont = 1;
-            tabuleiro = new string[TamanhoDoTabuleiro, TamanhoDoTabuleiro];
+            MatrizTabuleiro = new string[TamanhoDoTabuleiro, TamanhoDoTabuleiro];
 
             for (int i = 0; i < TamanhoDoTabuleiro; i++)
             {
@@ -39,22 +45,22 @@
                         if (j % 2 == 0)
                         {
                             if (cont > 9)
-                                tabuleiro[i, j] = $" {cont}";
+                                MatrizTabuleiro[i, j] = $" {cont}";
                             else if (cont > 99)
-                                tabuleiro[i, j] = $"{cont}";
+                                MatrizTabuleiro[i, j] = $"{cont}";
                             else
-                                tabuleiro[i, j] = $" {cont} ";
+                                MatrizTabuleiro[i, j] = $" {cont} ";
                             cont++;
                         }
                         else
-                            tabuleiro[i, j] = "|";
+                            MatrizTabuleiro[i, j] = "|";
                     }
                     else
                     {
                         if (j % 2 != 0)
-                            tabuleiro[i, j] = "+";
+                            MatrizTabuleiro[i, j] = "+";
                         else
-                            tabuleiro[i, j] = "---";
+                            MatrizTabuleiro[i, j] = "---";
                     }
 
                 }
@@ -62,35 +68,45 @@
         }
 
         // função para criar lista de jogadas possíveis
-        internal void ListarJogadasPossiveis()
+        private void ListarJogadasPossiveis()
         {
-            jogadasPossiveis = new List<string>();
+            JogadasPossiveis = new List<string>();
             for (int i = 1; i <= Math.Pow((TamanhoDoTabuleiro + 1) / 2, 2); i++)
             {
-                jogadasPossiveis.Add($"{i}");
+                JogadasPossiveis.Add($"{i}");
             }
         }
 
-        // função para imprimir o tabuleiro
-        internal void MostrarTabuleiro()
-        {
-            Console.WriteLine("\n");
-            for (int i = 0; i < TamanhoDoTabuleiro; i++)
-            {
-                Console.Write("   ");
-                for (int j = 0; j < TamanhoDoTabuleiro; j++)
-                {
-                    ConsoleColor aux = Console.ForegroundColor;
-                    if (tabuleiro[i, j].Trim() == "X")
-                        Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    else if (tabuleiro[i, j].Trim() == "O")
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
 
-                    Console.Write(tabuleiro[i, j]);
-                    Console.ForegroundColor = aux;
-                }
-                Console.WriteLine();
+        // função para fazer uma string do tabuleiro para adicioná-lo no registro da partida
+        public static string TabuleiroParaRegistro(Tabuleiro tabuleiro)
+        {
+            string resultado = "";
+            foreach (string s in tabuleiro.MatrizTabuleiro)
+            {
+                int n;
+                if (int.TryParse(s, out n))
+                    resultado += "1,";
+                else
+                    resultado += $"{s},";
             }
-        }   
+            return resultado;
+        }
+        // função para transformar um tabuleiro de registro (string[] em um objeto da classe Tabuleiro)
+        public static Tabuleiro TransformarTabuleiroDeRegistroEmTabuleiro(string[] tabuleiroDeRegistro, int tamanhoDoTabuleiro)
+        {
+            string[,] matrizTabuleiro = new string[tamanhoDoTabuleiro, tamanhoDoTabuleiro];
+            int cont = 0;
+            for(int i=0; i<tamanhoDoTabuleiro; i++)
+            {
+                for(int j=0; j<tamanhoDoTabuleiro; j++)
+                {
+                    matrizTabuleiro[i, j] = tabuleiroDeRegistro[cont];
+                    cont++;
+                }
+            }
+            return new Tabuleiro(matrizTabuleiro, tamanhoDoTabuleiro);
+        }
+       
     }
 }
