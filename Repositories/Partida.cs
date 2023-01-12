@@ -3,7 +3,7 @@
 namespace JogoDaVelha.Repositories
 {
     // classe para registrar as Partidas
-    internal class Partida
+    public class Partida
     {
         public int? NumeroDaPartidaId { get; private set; }
         public int TamanhoDoTabuleiro { get; private set; }

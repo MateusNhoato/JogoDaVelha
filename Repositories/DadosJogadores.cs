@@ -2,11 +2,11 @@
 using JogoDaVelha.Entities;
 using JogoDaVelha.Services;
 using JogoDaVelha.Views;
-using System.Globalization;
 
 namespace JogoDaVelha.Repositories
 {
-    internal class DadosJogadores
+    // classe para manipular a lista de jogadores
+    public static class DadosJogadores
     {
         // lista de jogadores
         private static List<Jogador> _jogadores = new List<Jogador>();
@@ -15,10 +15,10 @@ namespace JogoDaVelha.Repositories
 
 
         // função para cadastrar jogador novo
-        internal static void CadastrarJogador()
+        public static void CadastrarJogador()
         {
-            Tela.ImprimirCadastrarJogador();            
-            string? nome = Menu.LerNomeEPassarParaPascalCase();
+            Tela.ImprimirCadastrarJogador();
+            string? nome = Utilidades.LerNomeEPassarParaPascalCase();
 
             if (nome.Length > 1 && nome.Length <= 60)
             {
@@ -30,18 +30,18 @@ namespace JogoDaVelha.Repositories
                         if (!char.IsLetter(c))
                         {
                             Console.WriteLine("  Nome do usuário só pode conter letras.");
-                            Menu.EntradaInvalida();
+                            Utilidades.EntradaInvalida();
                             return;
                         }
                     }
                 }
-                
+
                 foreach (Jogador jogador in _jogadores)
                 {
                     if (jogador.Nome == nome)
                     {
                         Console.WriteLine("Jogador já cadastrado.");
-                        Menu.AperteEnterParaContinuar();
+                        Utilidades.AperteEnterParaContinuar();
                         return;
                     }
                 }
@@ -49,23 +49,23 @@ namespace JogoDaVelha.Repositories
                 _jogadores.Add(novoJogador);
                 Registro.SalvarDadosDosJogadores();
                 Console.WriteLine("\n  Jogador cadastrado com sucesso!");
-                Menu.AperteEnterParaContinuar();
+                Utilidades.AperteEnterParaContinuar();
             }
             else
             {
                 Console.WriteLine("  Nomes devem conter entre 2 a 60 letras.");
-                Menu.AperteEnterParaContinuar();
+                Utilidades.AperteEnterParaContinuar();
             }
 
         }
         // sobrecarga da função CadastrarJogador, usado para cadastrar jogadores que já estavam salvos no arquivo txt
-        internal static void CadastrarJogador(Jogador jogador)
+        public static void CadastrarJogador(Jogador jogador)
         {
             _jogadores.Add(jogador);
         }
 
         // função para achar jogadores pelos seus nomes para Jogar
-        internal static void AcharJogadoresParaJogo(string nomePrimeiroJogador, string nomeSegundoJogador)
+        public static void AcharJogadoresParaJogo(string nomePrimeiroJogador, string nomeSegundoJogador)
         {
             Jogador? primeiroJogador = DadosJogadores._jogadores.Find(x => x.Nome == nomePrimeiroJogador);
             Jogador? segundoJogador = DadosJogadores._jogadores.Find(x => x.Nome == nomeSegundoJogador);
@@ -77,13 +77,13 @@ namespace JogoDaVelha.Repositories
                 else
                 {
                     Console.WriteLine("\n  Um Jogador não pode jogar contra si mesmo.");
-                    Menu.AperteEnterParaContinuar();
+                    Utilidades.AperteEnterParaContinuar();
                 }
             }
             else
             {
                 Console.WriteLine("\n  Jogador(es) inválido(s)");
-                Menu.AperteEnterParaContinuar();
+                Utilidades.AperteEnterParaContinuar();
             }
         }
     }

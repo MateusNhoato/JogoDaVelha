@@ -1,10 +1,11 @@
 ﻿using JogoDaVelha.Repositories;
+using JogoDaVelha.Services;
 using JogoDaVelha.Views;
 using System.Globalization;
 
 namespace JogoDaVelha.Controllers
 {
-    internal class Menu
+    public static class Menu
     {
         // função para mostrar o menu principal
         internal static void MostrarMenu()
@@ -37,7 +38,7 @@ namespace JogoDaVelha.Controllers
 
                     case "5":
                         Tela.ImprimirHistoricoDeJogador(true);
-                        Registro.MostrarHistoricoDePartidas(LerNomeEPassarParaPascalCase());
+                        Registro.MostrarHistoricoDePartidas(Utilidades.LerNomeEPassarParaPascalCase());
                         break;
 
                     case "6":
@@ -45,7 +46,7 @@ namespace JogoDaVelha.Controllers
                         break;
 
                     default:
-                        EntradaInvalida();
+                        Utilidades.EntradaInvalida();
                         break;
 
                 }
@@ -60,40 +61,14 @@ namespace JogoDaVelha.Controllers
             Tela.ImprimirJogar();
 
             Tela.ImprimirJogadores("X");
-            string? nomePrimeiroJogador = LerNomeEPassarParaPascalCase();
+            string? nomePrimeiroJogador = Utilidades.LerNomeEPassarParaPascalCase();
             Tela.ImprimirJogadores("O");
-            string? nomeSegundoJogador = LerNomeEPassarParaPascalCase();
+            string? nomeSegundoJogador = Utilidades.LerNomeEPassarParaPascalCase();
 
             DadosJogadores.AcharJogadoresParaJogo(nomePrimeiroJogador, nomeSegundoJogador);
-
-        }       
-      
-
-        // função para passar um nome para pascal case
-        internal static string LerNomeEPassarParaPascalCase()
-        {
-            TextInfo textInfo = new CultureInfo("pt-br", false).TextInfo;
-            string nome = Console.ReadLine();            
-            nome = textInfo.ToTitleCase(nome);
-
-            return nome;
         }
 
-        // funções utilitária para comunicação com usuário
-        internal static void EntradaInvalida()
-        {
-            Console.WriteLine(Arte.linha);
-            Console.WriteLine("  Entrada inválida.");
-            Thread.Sleep(1200);
-            Console.Clear();
-        }
 
-        internal static void AperteEnterParaContinuar()
-        {
-            Console.WriteLine(Arte.linha);
-            Console.WriteLine("  Aperte enter para continuar");
-            Console.ReadLine();
-            Console.Clear();
-        }
+       
     }
 }

@@ -1,19 +1,20 @@
 ﻿using JogoDaVelha.Controllers;
 using JogoDaVelha.Entities;
+using JogoDaVelha.Services;
 using JogoDaVelha.Views;
 
 namespace JogoDaVelha.Repositories
 {
     // classe para manipular os arquivos txt
-    internal static class Registro
+    public static class Registro
     {
         // paths para os arquivos
         private static string _pathDadosJogadores = @"..\..\..\Repositories\Data\DadosDosJogadores.txt";
         private static string _pathRegistroPartidas = @"..\..\..\Repositories\Data\RegistroDasPartidas.txt";
-        
+
 
         // função para checkar se há dados no arquivo e iniciar com eles caso existam
-        internal static void AbrirDadosDosJogadoresAoIniciar()
+        public static void AbrirDadosDosJogadoresAoIniciar()
         {
             try
             {
@@ -48,7 +49,7 @@ namespace JogoDaVelha.Repositories
         }
 
         // função para salvar os dados de todos os jogadores
-        internal static void SalvarDadosDosJogadores()
+        public static void SalvarDadosDosJogadores()
         {
 
             List<Jogador> jogadores = DadosJogadores.Jogadores;
@@ -64,35 +65,32 @@ namespace JogoDaVelha.Repositories
         }
 
         // função para salvar os resultados da partida
-        internal static void SalvarResultadoDaPartida(Partida partida)
+        public static void SalvarResultadoDaPartida(Partida partida)
         {
             int partidaDeNumero = 0;
 
-           try
+            try
             {
                 string[] file = File.ReadAllLines(_pathRegistroPartidas);
                 partidaDeNumero += file.Length;
             }
-            
+
             // caso o arquivo não esteja criado
             catch (FileNotFoundException)
             {
                 File.Create(_pathDadosJogadores).Close();
             }
 
-            // aumentando a variável para registrar a seguir
-            partidaDeNumero++;
-
             // registrando resutados
             using (StreamWriter sw = new StreamWriter(_pathRegistroPartidas, true))
             {
-                sw.WriteLine($"{partidaDeNumero};{partida.Tabuleiro.TamanhoDoTabuleiro};{Tabuleiro.TabuleiroParaRegistro(partida.Tabuleiro)};{partida.Jogador1};{partida.Jogador2};{partida.Resultado}");
+                sw.WriteLine($"{++partidaDeNumero};{partida.Tabuleiro.TamanhoDoTabuleiro};{Tabuleiros.TabuleiroParaRegistro(partida.Tabuleiro)};{partida.Jogador1};{partida.Jogador2};{partida.Resultado}");
             }
 
         }
 
         // função para mostrar o resultado das partidas anteriores
-        internal static void MostrarHistoricoDePartidas(string? nome)
+        public static void MostrarHistoricoDePartidas(string? nome)
         {
             Tela.ImprimirHistoricoDeJogador(false);
 
@@ -100,7 +98,7 @@ namespace JogoDaVelha.Repositories
             if (jogador == null && nome != null)
             {
                 Console.WriteLine("  Jogador não encontrado.");
-                Menu.AperteEnterParaContinuar();
+                Utilidades.AperteEnterParaContinuar();
                 return;
             }
 
@@ -112,7 +110,7 @@ namespace JogoDaVelha.Repositories
                     string? linha = sr.ReadLine();
                     // variável auxiliar para partidas de histórico de um jogador específico
                     int contAux = 0;
-                    if(nome != null)
+                    if (nome != null)
                         Console.WriteLine($"   Histórico de {nome}");
 
 
@@ -129,7 +127,7 @@ namespace JogoDaVelha.Repositories
 
                         // caso a função seja chamada com um nome específico
                         if (nome != null)
-                        { 
+                        {
                             if (jogador1 != nome && jogador2 != nome)
                             {
                                 linha = sr.ReadLine();
@@ -138,24 +136,19 @@ namespace JogoDaVelha.Repositories
                             contAux++;
                             numeroDaPartida = contAux;
                         }
-                        Partida partida = new Partida(numeroDaPartida, tamanhoTabuleiro, Tabuleiro.TransformarTabuleiroDeRegistroEmTabuleiro(tabuleiro, tamanhoTabuleiro), jogador1, jogador2, resultado);
+                        Partida partida = new Partida(numeroDaPartida, tamanhoTabuleiro, Tabuleiros.TransformarTabuleiroDeRegistroEmTabuleiro(tabuleiro, tamanhoTabuleiro), jogador1, jogador2, resultado);
                         // imprimindo os resultados
-                        Tela.ImprimirPartida(partida);                     
+                        Tela.ImprimirPartida(partida);
                         linha = sr.ReadLine();
                     }
-
                 }
             }
-
             // se o arquivo não existe, crio um e fecho ele
             catch (FileNotFoundException)
             {
                 File.Create(_pathRegistroPartidas).Close();
             }
-            Menu.AperteEnterParaContinuar();
+            Utilidades.AperteEnterParaContinuar();
         }
-
-
-       
     }
 }

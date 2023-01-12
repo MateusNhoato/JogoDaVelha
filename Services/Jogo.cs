@@ -6,10 +6,10 @@ using JogoDaVelha.Views;
 
 namespace JogoDaVelha.Services
 {
-    internal class Jogo
+    public static class Jogo
     {
         // função de jogada de cada jogador
-        internal static void Jogada(string jogada, string jogador, Tabuleiro tabuleiro)
+        public static void Jogada(string jogada, string jogador, Tabuleiro tabuleiro)
         {
 
             for (int i = 0; i < tabuleiro.TamanhoDoTabuleiro; i++)
@@ -18,15 +18,14 @@ namespace JogoDaVelha.Services
                 {
                     if (tabuleiro.MatrizTabuleiro[i, j].Trim() == jogada)
                     {
-                        tabuleiro.MatrizTabuleiro[i, j] = jogador;                        
+                        tabuleiro.MatrizTabuleiro[i, j] = jogador;
                     }
                 }
             }
         }
 
-
         // função para checkar se alguém ganhou ou deu velha
-        internal static string? CheckarVitoriaOuVelha(Tabuleiro tabuleiro)
+        public static string? CheckarVitoriaOuVelha(Tabuleiro tabuleiro)
         {
 
             int tamanhoAuxiliar = (tabuleiro.TamanhoDoTabuleiro + 1) / 2;
@@ -107,11 +106,10 @@ namespace JogoDaVelha.Services
 
             // caso ninguém ganhou e não deu velha
             return null;
-
         }
 
         // função principal de jogar
-        internal static void Jogar(Jogador jogador1, Jogador jogador2)
+        public static void Jogar(Jogador jogador1, Jogador jogador2)
         {
             int tamanho;
             string? vencedor;
@@ -204,8 +202,7 @@ namespace JogoDaVelha.Services
 
                     // salvando a partida                 
                     Registro.SalvarResultadoDaPartida(new Partida(tabuleiro.TamanhoDoTabuleiro, tabuleiro, jog1, jog2, vencedor));
-
-                    Menu.AperteEnterParaContinuar();
+                    Utilidades.AperteEnterParaContinuar();
                     break;
                 }
 

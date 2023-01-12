@@ -1,13 +1,15 @@
 ﻿using JogoDaVelha.Controllers;
 using JogoDaVelha.Entities;
 using JogoDaVelha.Repositories;
+using JogoDaVelha.Services;
 
 namespace JogoDaVelha.Views
 {
-    internal static class Tela
+    //classe estática utilitária para imprimir diversas coisas
+    public static class Tela
     {
         // função para imprimir o menu principal
-        internal static void ImprimirMenuPrincipal()
+        public static void ImprimirMenuPrincipal()
         {
             Console.Clear();
             Console.WriteLine(Arte.titulo + "\n");
@@ -20,36 +22,37 @@ namespace JogoDaVelha.Views
             Console.WriteLine("  6 - Hall da fama");
             Console.WriteLine("  0 - Encerrar o programa");
             Console.Write("\n  Digite a opção desejada: ");
-            
+
         }
         // função para imprimir cadastro de jogador
-        internal static void ImprimirCadastrarJogador()
+        public static void ImprimirCadastrarJogador()
         {
             Console.Clear();
             Console.WriteLine(Arte.adicionarJogador + "\n");
             Console.Write("  Digite o nome do jogador: ");
         }
         // funções para imprimir Jogar
-        internal static void ImprimirJogar()
+        public static void ImprimirJogar()
         {
             Console.Clear();
             Console.WriteLine(Arte.jogar);
         }
-        internal static void ImprimirJogadores(string jogada) 
+        internal static void ImprimirJogadores(string jogada)
         {
             Console.Write($"  Player {jogada}: ");
         }
+
         // função para imprimir histórico do jogador
-        internal static void ImprimirHistoricoDeJogador(bool historicoDeJogador)
+        public static void ImprimirHistoricoDeJogador(bool historicoDeJogador)
         {
             Console.Clear();
             Console.WriteLine(Arte.historico + "\n");
-            if(historicoDeJogador)
+            if (historicoDeJogador)
                 Console.Write("  Digitar o nome do jogador: ");
         }
 
         // função para imrpimir uma partida, usada para ver o histórico
-        internal static void ImprimirPartida(Partida partida)
+        public static void ImprimirPartida(Partida partida)
         {
             Console.WriteLine(Arte.linha);
             Console.WriteLine(partida);
@@ -61,9 +64,9 @@ namespace JogoDaVelha.Views
                 for (int j = 0; j < partida.Tabuleiro.TamanhoDoTabuleiro; j++)
                 {
                     ConsoleColor aux = Console.ForegroundColor;
-                    if (partida.Tabuleiro.MatrizTabuleiro[i,j].Trim() == "X")
+                    if (partida.Tabuleiro.MatrizTabuleiro[i, j].Trim() == "X")
                         Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    else if (partida.Tabuleiro.MatrizTabuleiro[i,j].Trim() == "O")
+                    else if (partida.Tabuleiro.MatrizTabuleiro[i, j].Trim() == "O")
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                     if (partida.Tabuleiro.MatrizTabuleiro[i, j].Trim() == "1")
                         Console.Write("   ");
@@ -88,7 +91,7 @@ namespace JogoDaVelha.Views
 
 
         // função para listar os jogadores
-        internal static void ImprimirListaDosJogadores(List<Jogador> jogadores)
+        public static void ImprimirListaDosJogadores(List<Jogador> jogadores)
         {
             Console.Clear();
             Console.WriteLine(Arte.jogadores + "\n");
@@ -100,15 +103,14 @@ namespace JogoDaVelha.Views
                 Console.WriteLine("  Nenhum jogador cadastrado.");
 
             Console.WriteLine("\n  Obs: Vitórias = 3pts | Empates = 1pt | Derrotas = -1pt.");
-            Menu.AperteEnterParaContinuar();
+            Utilidades.AperteEnterParaContinuar();
         }
 
-        // função para imprimir o hall da fama
-        internal static void ImprimirHallDaFama(List<Jogador> jogadores)
+        // função para imprimir o hall da fama (melhores 3 jogadores)
+        public static void ImprimirHallDaFama(List<Jogador> jogadores)
         {
             Console.Clear();
             Console.WriteLine(Arte.hallDaFama + "\n");
-            Console.WriteLine("  Top 3 melhores jogadores de todos os tempos");
             // lista em ordem de pontuação
             List<Jogador> jogadoresPorPontos = jogadores.
                 Select(x => new Jogador(x.Nome, x.QuantidadeVitorias, x.QuantidadeEmpates, x.QuantidadeDerrotas))
@@ -126,16 +128,14 @@ namespace JogoDaVelha.Views
                     continue;
 
                 Console.WriteLine($"  Top {i + 1}: {jogador.Nome} | {jogador.Pontuacao} pontos | {jogador.QuantidadeVitorias}V/{jogador.QuantidadeEmpates}E/{jogador.QuantidadeDerrotas}D\n");
-                if (i >= 2)
+                if (i >= 5)
                     break;
             }
-            Menu.AperteEnterParaContinuar();
+            Utilidades.AperteEnterParaContinuar();
         }
 
-
-
-        // função para imprimir o MatrizTabuleiro
-        internal static void ImprimirTabuleiro(Tabuleiro tabuleiro)
+        // função para imprimir o tabuleiro
+        public static void ImprimirTabuleiro(Tabuleiro tabuleiro)
         {
             Console.WriteLine("\n");
             for (int i = 0; i < tabuleiro.TamanhoDoTabuleiro; i++)
