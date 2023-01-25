@@ -33,9 +33,7 @@ namespace JogoDaVelha.Services
             string[] valoresNaDiagonalPrincipal = new string[tamanhoAuxiliar];
             string[] valoresNaDiagonalSecundaria = new string[tamanhoAuxiliar];
 
-            int diagonalSecundariaAuxiliar = tamanhoAuxiliar + 1;
-            if (tamanhoAuxiliar % 2 == 0)
-                diagonalSecundariaAuxiliar = tamanhoAuxiliar + 2;
+            int diagonalSecundariaAuxiliar = tabuleiro.TamanhoDoTabuleiro - 1;
 
             // lista das colunas
             List<string[]> colunas = new List<string[]>();

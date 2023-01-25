@@ -11,9 +11,10 @@ namespace JogoDaVelha
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Title = "Jogo da Velha";
             Console.Clear();
-
+            
             Registro.AbrirDadosDosJogadoresAoIniciar();
             Menu.MostrarMenu();
+            
         }
     }
 }

@@ -5,7 +5,7 @@ using JogoDaVelha.Views;
 
 namespace JogoDaVelha.Repositories
 {
-    // classe para manipular os arquivos txt
+    //classe para manipular os arquivos txt
     public static class Registro
     {
         // paths para os arquivos
@@ -133,8 +133,7 @@ namespace JogoDaVelha.Repositories
                                 linha = sr.ReadLine();
                                 continue;
                             }
-                            contAux++;
-                            numeroDaPartida = contAux;
+                            numeroDaPartida = ++contAux;
                         }
                         Partida partida = new Partida(numeroDaPartida, tamanhoTabuleiro, Tabuleiros.TransformarTabuleiroDeRegistroEmTabuleiro(tabuleiro, tamanhoTabuleiro), jogador1, jogador2, resultado);
                         // imprimindo os resultados

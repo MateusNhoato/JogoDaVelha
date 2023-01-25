@@ -58,17 +58,15 @@ namespace JogoDaVelha.Repositories
             }
 
         }
-        // sobrecarga da função CadastrarJogador, usado para cadastrar jogadores que já estavam salvos no arquivo txt
-        public static void CadastrarJogador(Jogador jogador)
-        {
-            _jogadores.Add(jogador);
-        }
+        // sobrecarga da função CadastrarJogador, usada para colocar jogadores que já estavam salvos no arquivo txt na lista de jogadores
+        public static void CadastrarJogador(Jogador jogador) => _jogadores.Add(jogador);
+        
 
         // função para achar jogadores pelos seus nomes para Jogar
         public static void AcharJogadoresParaJogo(string nomePrimeiroJogador, string nomeSegundoJogador)
         {
-            Jogador? primeiroJogador = DadosJogadores._jogadores.Find(x => x.Nome == nomePrimeiroJogador);
-            Jogador? segundoJogador = DadosJogadores._jogadores.Find(x => x.Nome == nomeSegundoJogador);
+            Jogador? primeiroJogador = _jogadores.Find(x => x.Nome == nomePrimeiroJogador);
+            Jogador? segundoJogador = _jogadores.Find(x => x.Nome == nomeSegundoJogador);
 
             if (primeiroJogador != null && segundoJogador != null)
             {
